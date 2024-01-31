@@ -479,13 +479,13 @@ const BannerPage = () => {
         <thead className="lg:text-xl">
           <tr>
             <th className="py-2 px-4 border-b-2 font-bold text-xl text-center">
-              projectName Size
+               Size
             </th>
             <th className="py-2 px-4 border-b-2 font-bold text-xl text-center">
-              projectName Type
+              Type
             </th>
             <th className="py-2 px-4 border-b-2 font-bold text-xl text-center">
-              projectName Price
+               Price
             </th>
           </tr>
         </thead>
