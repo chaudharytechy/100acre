@@ -234,12 +234,12 @@ export default function Nav() {
                   onMouseEnter={handleHover}
                   onMouseLeave={handleLeave}
                 >
-                  <a
-                    href="/rent"
+                  <Link
+                    to="/rent"
                     className="text-white font-semibold text-lg px-1 py-2 rounded-md "
                   >
                     Rent
-                  </a>
+                  </Link>
                   <div
                     className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${
                       isMenuOpen ? "block" : "hidden"
@@ -320,12 +320,12 @@ export default function Nav() {
                   onMouseEnter={handleHover1}
                   onMouseLeave={handleLeave1}
                 >
-                  <a
-                    href="/buy"
+                  <Link
+                    to="/buy"
                     className="text-white font-semibold text-lg px-1 py-2 rounded-md "
                   >
                     Buy
-                  </a>
+                  </Link>
                   <div
                     className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${
                       isMenuOpen1 ? "block" : "hidden"
