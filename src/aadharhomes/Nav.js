@@ -238,9 +238,9 @@ export default function Nav() {
                   onMouseEnter={handleHover}
                   onMouseLeave={handleLeave}
                 >
-                  <a
-                    href="/rent"
-                    className="text-white font-semibold text-lg px-1 py-2 rounded-md "
+                  <Link
+                    to="/rent"
+                    className="text-white font-semibold text-lg px-1 py-2 rounded-md  "
                   >
                     Rent
                   </Link>

@@ -162,7 +162,7 @@ const SearchData = () => {
                                 </Link>
                               </li>
                             ) : (
-                              <li className="text-left" >
+                              <li className="text-left">
                                 <Link to={`/${item.projectName}`} target="_blank">
                                   <button
                                     type="button"
