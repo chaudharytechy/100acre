@@ -11,6 +11,8 @@ const customStyle = {
   width: "80%",
 };
 
+
+
 const ViewPropertyAdmin = () => {
   const [viewProperty, setViewAllProperty] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,6 +73,31 @@ const ViewPropertyAdmin = () => {
 
     fetchData();
   }, []);
+
+
+  // const res = axios.delete(`https://acre.onrender.com/postPerson/propertyDelete/${id}`)
+
+  const handleDeleteUser = async(id) =>{
+    try {
+      const res = axios.delete(`https://acre.onrender.com/postPerson/propertyDelete/${id}`)
+      if(res.status >= 200 && res.status < 300){
+        window.location.reload();
+      }else{
+        console.error('Failed to delete user. Server returned an error.');
+      }
+    } catch (error) {
+      console.error('An error occurred while deleting user:', error.message);
+    }
+  }
+
+  const handleDeleteButtonClicked = (id) =>{
+    const confirmDelete = window.confirm('Are you sure you want to delete this user?');
+    if(confirmDelete){
+      handleDeleteUser(id);
+    }
+  }
+
+  
 
   return (
     <>
@@ -186,14 +213,15 @@ const ViewPropertyAdmin = () => {
                               Edit
                             </button>
                           </Link>{" "}
-                          <Link>
+                    
                             <button
                               type="button"
+                              onClick={()=>handleDeleteButtonClicked(id)}
                               className="text-white  bg-red-700 hover:bg-red-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-2 py-1.5 text-center"
                             >
                               Delete
                             </button>
-                          </Link>{" "}
+                         
                         </td>
 
                         <td className="px-2 py-1 flex space-x-1"></td>

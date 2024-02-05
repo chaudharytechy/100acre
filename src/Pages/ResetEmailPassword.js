@@ -29,7 +29,7 @@ const ResetEmailPassword = () => {
         email === "" ? alert("filled email") : <ToastContainer />;
       }
     } catch (error) {
-      alert("Please enter a registered email");
+      // alert("Please enter a registered email");
     }
   };
 

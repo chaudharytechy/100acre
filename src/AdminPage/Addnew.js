@@ -19,13 +19,40 @@ const AddNew = () => {
     projectReraNo: "",
     type: "",
     city: "",
-    projectOverview:'',
-    // logo:"",
-    // frontImage:"",
-    // project_locationImage: null,
-    // project_floorplan_Image:[null],
+    projectOverview: "",
   });
 
+  const resetData = () => {
+    setEditFromData({
+      projectName: "",
+      state: "",
+      projectAddress: "",
+      project_discripation: "",
+      AboutDeveloper: "",
+      builderName: "",
+      projectRedefine_Connectivity: [],
+      projectRedefine_Education: [],
+      projectRedefine_Business: [],
+      projectRedefine_Entertainment: [],
+      Amenities: [],
+      meta_title: "",
+      meta_description: "",
+      projectBgContent: "",
+      projectReraNo: "",
+      type: "",
+      city: "",
+      projectOverview: "",
+    });
+  };
+
+  const resetImageData = () => {
+    setFileData({
+      frontImage: "",
+      logo: "",
+      project_locationImage: "",
+      project_floorplan_Image: "",
+    });
+  };
 
   const handleProjectOverviewChange = (event) => {
     setEditFromData({
@@ -34,12 +61,11 @@ const AddNew = () => {
     });
   };
 
-
   const [fileData, setFileData] = useState({
     frontImage: null,
     logo: null,
     project_locationImage: null,
-    project_floorplan_Image:[null],
+    project_floorplan_Image: [null],
   });
 
   const handleChangeProjectData = (e) => {
@@ -55,7 +81,7 @@ const AddNew = () => {
     if (event.target.name === category) {
       newArray = event.target.value.split(" ");
     }
-    console.log(newArray,"shkhs")
+    console.log(newArray, "shkhs");
     setEditFromData((prevState) => ({
       ...prevState,
       [category]: newArray.length > 0 ? newArray : event.target.value,
@@ -87,26 +113,23 @@ const AddNew = () => {
     handleInputChange(event, "projectRedefine_Entertainment");
   };
 
-const handleOtherImageChange = (e) => {
-  var files = e.target.files;
-  if (files) {
+  const handleOtherImageChange = (e) => {
+    var files = e.target.files;
+    if (files) {
       const updatedOtherImage = [];
       for (let i = 0; i < files.length; i++) {
-          updatedOtherImage.push(files[i]);
+        updatedOtherImage.push(files[i]);
       }
       setFileData({
-          ...fileData,
-          project_floorplan_Image: updatedOtherImage,
+        ...fileData,
+        project_floorplan_Image: updatedOtherImage,
       });
-  } else {
+    } else {
       console.error("No files selected");
-  }
-};
+    }
+  };
 
-  
   const otherImageLength = fileData.project_floorplan_Image.length;
- 
-
 
   const handleSubmitProject = async (e) => {
     e.preventDefault();
@@ -117,24 +140,26 @@ const handleOtherImageChange = (e) => {
     for (const key in editFromData) {
       formDataAPI.append(key, editFromData[key]);
     }
-    for (let i = 0; i <otherImageLength; i++) {
-      formDataAPI.append('project_floorplan_Image', fileData.project_floorplan_Image[i]);  
+    for (let i = 0; i < otherImageLength; i++) {
+      formDataAPI.append(
+        "project_floorplan_Image",
+        fileData.project_floorplan_Image[i]
+      );
     }
-  
+
     formDataAPI.append("logo", fileData.logo);
     formDataAPI.append("project_locationImage", fileData.project_locationImage);
     formDataAPI.append("frontImage", fileData.frontImage);
-  
-    
+
     try {
-     
       const response = await axios.post(apiEndpoint, formDataAPI);
-      console.log("data post", response);
-  
+      alert("Data Posted")
+      resetData();
+      resetImageData();
+
     } catch (error) {
       console.error("Error submitting form:", error);
     }
-   
   };
 
   const handleFileChange = (e, key) => {
@@ -142,7 +167,6 @@ const handleOtherImageChange = (e) => {
     newFileData[key] = e.target.files[0];
     setFileData(newFileData);
   };
-
 
   return (
     <div className="">
@@ -157,18 +181,15 @@ const handleOtherImageChange = (e) => {
         </div>
 
         <div className="space-y-4 px-8  py-3 pt-3">
-
-       
-      <select
-        className="text-gray-600 border px-2 py-1 outline-none w-full rounded-md ring-black focus:ring-1"
-        value={editFromData.projectOverview}
-        onChange={handleProjectOverviewChange}
-      >
-        <option value="">Select Project Overview</option>
-        <option value="trending">Trending</option>
-        <option value="featured">Featured</option>
-      </select>
-  
+          <select
+            className="text-gray-600 border px-2 py-1 outline-none w-full rounded-md ring-black focus:ring-1"
+            value={editFromData.projectOverview}
+            onChange={handleProjectOverviewChange}
+          >
+            <option value="">Select Project Overview</option>
+            <option value="trending">Trending</option>
+            <option value="featured">Featured</option>
+          </select>
 
           <label className="block" for="name">
             <input
@@ -177,7 +198,7 @@ const handleOtherImageChange = (e) => {
               placeholder="Project Name"
               name="projectName"
               value={editFromData.projectName}
-              onChange={ handleChangeProjectData}
+              onChange={handleChangeProjectData}
             />
           </label>
 

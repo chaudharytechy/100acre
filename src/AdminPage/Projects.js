@@ -43,7 +43,6 @@ const Projects = () => {
       try {
         const res = await axios.get("https://acre.onrender.com/project/viewAll");
         setViewAll(res.data.data);
-        console.log(res);
       } catch (error) {
         console.log(error);
       }
@@ -53,20 +52,14 @@ const Projects = () => {
 
   const handleDeleteUser = async (id) => {
     try {
-      // Send DELETE request to the server
       const response = await axios.delete(`https://acre.onrender.com/project/Delete/${id}`);
-      // Check if the request was successful (status code 200-299)
-      console.log(response,"delete user")
       if (response.status >= 200 && response.status < 300) {
-        console.log('User deleted successfully');
-        // You can perform additional actions here if needed
         window.location.reload();
       } else {
         console.error('Failed to delete user. Server returned an error.');
       }
     } catch (error) {
       console.error('An error occurred while deleting user:', error.message);
-      // Handle specific error cases if needed
     }
   };
 

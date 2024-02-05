@@ -108,10 +108,8 @@ export default function SignUp() {
               const sellerId = roleResponse.data.User._id;
               localStorage.setItem("mySellerId", JSON.stringify(sellerId));
               history("/");
-              showToastMessage();
             } else {
               history("/Admin/dashboard");
-              showToastMessage();
             }
           } else {
             console.error("Role fetch failed:", roleResponse);

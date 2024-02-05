@@ -14,6 +14,7 @@ const customStyle = {
   width: "80%"
 
 };
+
 const customStyles = {
   content: {
     top: '50%',
@@ -35,6 +36,15 @@ const ProjectsAddBhk = () => {
    price:"",
    bhk_Area:""
   });
+
+  const resetData = () => {
+    setEditFromData({
+      bhk_type: "",
+      price: "",
+      bhk_Area: ""
+    });
+  };
+  
 
   const [viewAll, setViewAll] = useState([]);
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -66,8 +76,8 @@ const ProjectsAddBhk = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`https://acre.onrender.com/bhk_insert/${id}`,editFromData);
-      console.log('User data inserted successfully:', response.data);
-      setEditFromData("")
+      alert("User data inserted successfully");
+      resetData();
     } catch (error) {
       console.error('Error inserting user data:', error.message);
     }
@@ -80,16 +90,14 @@ const ProjectsAddBhk = () => {
   function closeModal() {
     setIsOpen(false);
   }
-  console.log(id,"Ashish ifd")
+ 
   const handleDeleteUser = async (id) => {
     const urlDelete = `https://acre.onrender.com/bhk_delete/${id}`;
     console.log(urlDelete)
     try {
       const response = await axios.delete(`https://acre.onrender.com/bhk_delete/${id}`);
-      console.log(response,"delete user")
       if (response.status >= 200 && response.status < 300) {
-        console.log('User deleted successfully');
-        // window.location.reload();
+        window.location.reload();
       } else {
         console.error('Failed to delete user. Server returned an error.');
       }
@@ -194,7 +202,7 @@ const ProjectsAddBhk = () => {
                 <div className=" sm:w-[38rem] lg:w-full mx-auto lg:h-auto my-10 overflow-hidden rounded-2xl mt-0 mb-0 bg-white shadow-lg sm:max-w-lg">
                   <div className="bg-red-500 pb-1 pt-2 text-center text-white">
                     <p className="font-serif text-2xl font-semibold tracking-wider">
-                      Add Bhk
+                      Add Floor Plan
                     </p>
                   </div>
 

@@ -11,26 +11,32 @@ const customStyle = {
   width: "80%",
 };
 
-function handleFileChange(event) {
-  const input = event.target;
-  if (input.files && input.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      const previewImage = document.getElementById("previewImage");
-      previewImage.src = e.target.result;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-}
 const ProjectEdit = () => {
-  const [viewDetails, setViewDetails] = useState([]);
+  const [values, setValues] = useState({
+    frontImage: "",
+    otherImage: [],
+    project_floorplan_Image: [],
+    project_locationImage: "",
+    logo: "",
+    projectName: "",
+    builderName: "",
+    projectAddress: "",
+    city: "",
+    state: "",
+    projectOverview: "",
+    projectRedefine_Business: "",
+    projectRedefine_Connectivity: "",
+    projectRedefine_Education: "",
+    projectRedefine_Entertainment: "",
+    projectReraNo: "",
+    AboutDeveloper: "",
+    Amenities: [],
+    type: "",
+  });
+
   const { id } = useParams();
-  const {
-    frontImage,
-    otherImage,
-    project_floorplan_Image,
-    project_locationImage,
-  } = viewDetails;
+  const { project_floorplan_Image, otherImage } = values;
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +44,7 @@ const ProjectEdit = () => {
         const res = await axios.get(
           `https://acre.onrender.com/project/Edit/${id}`
         );
-        setViewDetails(res.data.dataedit);
+        setValues(res.data.dataedit);
       } catch (error) {
         console.log(error);
       }
@@ -48,24 +54,14 @@ const ProjectEdit = () => {
 
   const handleUpdateUser = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.post(
         `https://acre.onrender.com/project/Update/${id}`,
-        {
-          method: "POST", // or 'POST' depending on your server logic
-          headers: {
-            "Content-Type": "application/json",
-            // Add any other headers as needed
-          },
-          // Add your update data here if required
-          // body: JSON.stringify({ key: 'value' }),
-        }
+        values
       );
-
-      if (response.ok) {
-        // Update was successful, handle the response if needed
+      if (response.status === 200) {
+        alert("Data updated successfully");
         console.log("User updated successfully");
       } else {
-        // Update failed, handle the error
         console.error("Failed to update user");
       }
     } catch (error) {
@@ -82,50 +78,34 @@ const ProjectEdit = () => {
             <table className="table table-striped table-bordered">
               <tbody>
                 <tr>
+                  <th>Project Front Image</th>
+                </tr>
+                <tr>
                   <td>
                     <img
-                      src={
-                        viewDetails.frontImage ? viewDetails.frontImage.url : ""
-                      }
-                      alt=""
+                      src={values.frontImage ? values.frontImage.url : ""}
+                      alt="front Image"
                       style={{ maxWidth: "20%" }}
-                      id="previewImage"
                     />
                     <br />
-                    <input type="file" onChange={(e) => handleFileChange(e)} />
+                    <input
+                          type="file"
+                          name="frontImage"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            console.log("Selected File:", file);
+                            setValues({ ...values, frontImage: file });
+                        }}
+                        />
                   </td>
                 </tr>
 
-                <tr>
-                  <th>Other Images</th>
-                </tr>
+               
 
-                <tr>
-                  <td>
-                    <section className="w-full mx-4">
-                      <div className="flex flex-wrap max-w-screen-md ">
-                        {otherImage &&
-                          Array.isArray(otherImage) &&
-                          otherImage.length > 0 &&
-                          otherImage.map((image, index) => (
-                            <article
-                              key={index}
-                              className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
-                            >
-                              <img
-                                src={image.url}
-                                alt={`Image ${index + 1}`}
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                            </article>
-                          ))}
-                      </div>
-                    </section>
-                  </td>
-                </tr>
                 <tr>
                   <th>Project FloorPlan Image</th>
                 </tr>
+
                 <tr>
                   <td>
                     <section className="w-full mx-4">
@@ -148,43 +128,79 @@ const ProjectEdit = () => {
                         <br />
                         <input
                           type="file"
-                          onChange={(e) => handleFileChange(e)}
+                          name="project_floorplan_Image"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            
+                            setValues({ ...values, project_floorplan_Image: file });
+                          }}
                         />
                       </div>
                     </section>
                   </td>
                 </tr>
+
                 <tr>
                   <th>Project Location Image</th>
                 </tr>
+
                 <tr>
                   <td>
-                    <section className="w-full mx-4">
-                      <div className="flex flex-wrap max-w-screen-md ">
-                        {project_locationImage &&
-                          Array.isArray(project_locationImage) &&
-                          project_locationImage.length > 0 &&
-                          project_locationImage.map((image, index) => (
-                            <article
-                              key={index}
-                              className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
-                            >
-                              <img
-                                src={image.url}
-                                alt={`Image ${index + 1}`}
-                                className="w-full h-full object-cover rounded-lg"
-                              />
-                            </article>
-                          ))}
+                    <tr>
+                      <td>
+                        <img
+                          src={
+                            values.project_locationImage
+                              ? values.project_locationImage.url
+                              : ""
+                          }
+                          alt="location"
+                          style={{ maxWidth: "20%" }}
+                          id="previewImage"
+                        />
                         <br />
                         <input
                           type="file"
-                          onChange={(e) => handleFileChange(e)}
+                          name="project_locationImage"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            
+                            setValues({ ...values, project_locationImage: file });
+                          }}
                         />
-                      </div>
-                    </section>
+                      </td>
+                    </tr>
                   </td>
                 </tr>
+
+                <tr>
+                  <th> Project Logo Image</th>
+                </tr>
+
+                <tr>
+                  <td>
+                    <tr>
+                      <td>
+                        <img
+                          src={values.logo ? values.logo.url : ""}
+                          alt="logo"
+                          style={{ maxWidth: "20%" }}
+                        />
+                        <br />
+                        <input
+                          type="file"
+                          name="logo"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            // console.log("Selected file:", file.name);
+                            setValues({ ...values, logo: file });
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  </td>
+                </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -193,10 +209,11 @@ const ProjectEdit = () => {
                         <input
                           type="text"
                           className="outline-none"
-                          value={viewDetails.projectName}
+                          value={values.projectName}
+                          name="projectName"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectName: e.target.value,
                             })
                           }
@@ -205,6 +222,7 @@ const ProjectEdit = () => {
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -212,11 +230,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.builderName}
                           className="outline-none"
+                          name="builderName"
+                          value={values.builderName}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               builderName: e.target.value,
                             })
                           }
@@ -233,11 +252,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectAddress}
+                          name="projectAddress"
                           className="outline-none"
+                          value={values.projectAddress}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectAddress: e.target.value,
                             })
                           }
@@ -254,13 +274,11 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.city}
+                          name="city"
                           className="outline-none"
+                          value={values.city}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              city: e.target.value,
-                            })
+                            setValues({ ...values, city: e.target.value })
                           }
                         />
                       </span>
@@ -275,13 +293,11 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.state}
                           className="outline-none"
+                          name="state"
+                          value={values.state}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              state: e.target.value,
-                            })
+                            setValues({ ...values, state: e.target.value })
                           }
                         />
                       </span>
@@ -296,11 +312,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectOverview}
                           className="outline-none"
+                          name="projectOverview"
+                          value={values.projectOverview}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectOverview: e.target.value,
                             })
                           }
@@ -317,11 +334,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectRedefine_Business}
                           className="outline-none"
+                          value={values.projectRedefine_Business}
+                          name="projectRedefine_Business"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectRedefine_Business: e.target.value,
                             })
                           }
@@ -330,6 +348,7 @@ const ProjectEdit = () => {
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -337,11 +356,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectRedefine_Connectivity}
+                          name="projectRedefine_Connectivity"
+                          value={values.projectRedefine_Connectivity}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectRedefine_Connectivity: e.target.value,
                             })
                           }
@@ -350,6 +370,7 @@ const ProjectEdit = () => {
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -357,19 +378,21 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectRedefine_Education}
-                          className="outline-none"
+                          name="projectRedefine_Education"
+                          value={values.projectRedefine_Education}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectRedefine_Education: e.target.value,
                             })
                           }
+                          className="outline-none"
                         />
                       </span>
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -377,11 +400,12 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectRedefine_Entertainment}
                           className="outline-none"
+                          name="projectRedefine_Entertainment"
+                          value={values.projectRedefine_Entertainment}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectRedefine_Entertainment: e.target.value,
                             })
                           }
@@ -390,6 +414,7 @@ const ProjectEdit = () => {
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -397,34 +422,15 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.projectReraNo}
-                          className="outline-none"
+                          name="projectReraNo"
+                          value={values.projectReraNo}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               projectReraNo: e.target.value,
                             })
                           }
-                        />
-                      </span>
-                    </span>
-                  </th>
-                </tr>
-                <tr>
-                  <th>
-                    <span className="text-red-600 font-semibold ">
-                      Project Redefine Entertainment :{" "}
-                      <span style={{ color: "black", fontWeight: "normal" }}>
-                        <input
-                          type="text"
-                          value={viewDetails.projectRedefine_Entertainment}
                           className="outline-none"
-                          onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              projectRedefine_Entertainment: e.target.value,
-                            })
-                          }
                         />
                       </span>
                     </span>
@@ -438,14 +444,15 @@ const ProjectEdit = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.AboutDeveloper}
-                          className="outline-none"
+                          name="AboutDeveloper"
+                          value={values.AboutDeveloper}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               AboutDeveloper: e.target.value,
                             })
                           }
+                          className="outline-none"
                         />
                       </span>
                     </span>
@@ -456,50 +463,14 @@ const ProjectEdit = () => {
                   <th>
                     <span className="text-red-600 font-semibold ">
                       Amenities :{" "}
-                      <span
-                        style={{
-                          color: "black",
-                          outline: "none",
-                          fontWeight: "normal",
-                        }}
-                      >
-                        <input
-                          type="text"
-                          className="outline-none"
-                          value={
-                            viewDetails.Amenities &&
-                            viewDetails.Amenities.length > 0
-                              ? viewDetails.Amenities.join(", ")
-                              : ""
-                          }
-                          onChange={(e) => {
-                            const newAmenities = e.target.value
-                              .split(",")
-                              .map((item) => item.trim());
-                            setViewDetails((prevDetails) => ({
-                              ...prevDetails,
-                              amenities: [...newAmenities],
-                            }));
-                          }}
-                        />
-                      </span>
-                    </span>
-                  </th>
-                </tr>
-                <tr>
-                  <th>
-                    <span className="text-red-600 font-semibold ">
-                      Type :{" "}
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.type}
                           className="outline-none"
+                          name="Amenities"
+                          value={values.Amenities}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              type: e.target.value,
-                            })
+                            setValues({ ...values, Amenities: e.target.value })
                           }
                         />
                       </span>
@@ -510,17 +481,15 @@ const ProjectEdit = () => {
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
-                      Available Date:{" "}
+                      Type :{" "}
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.availableDate}
                           className="outline-none"
+                          name="type"
+                          value={values.type}
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              availableDate: e.target.value,
-                            })
+                            setValues({ ...values, Amenities: e.target.value })
                           }
                         />
                       </span>

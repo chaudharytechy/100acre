@@ -186,14 +186,18 @@ export default function Nav() {
   const [token, setToken] = useState();
   const checkUserAuth = () => {
     const storedToken = localStorage.getItem("myToken");
-    // console.log(storedToken, "get token");
     setToken(storedToken);
-    // console.log(token, "new value");
   };
 
   useEffect(() => {
     checkUserAuth();
   }, []);
+
+  // const customCSS = {
+  //   backgroundColor: "red",
+  //   background: "linear-gradient(to bottom, #9baac2, #ff0000)",
+  // };
+  
 
   return (
     <Wrapper className="section" >
@@ -234,82 +238,82 @@ export default function Nav() {
                   onMouseEnter={handleHover}
                   onMouseLeave={handleLeave}
                 >
-                  <a
-                    href="/rent"
-                    className="text-white font-semibold text-lg px-1 py-2 rounded-md "
+                  <Link
+                    to="/rent"
+                    className="text-white font-semibold text-lg px-1 py-2 rounded-md  "
                   >
                     Rent
-                  </a>
+                  </Link>
                   <div
-                    className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${
+                    className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300  shadow-lg z-10 ${
                       isMenuOpen ? "block" : "hidden"
                     }`}
                   >
                     <div className="flex">
                       <div className="w-48">
-                        <a
+                        <Link
                           href="#"
-                          className="block px-4 py-2 text-black font-semibold text-lg hover:bg-gray-200"
+                          className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
                         >
                           Commercials
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Gurugaon
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Delhi
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Noida
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Dubai
-                        </a>
+                        </Link>
                       </div>
 
                       <div className="w-48">
-                        <a
+                        <Link
                           href="#"
                           className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
                         >
                           Residentials
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Gurugaon
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Delhi
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Noida
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Dubai
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -320,12 +324,12 @@ export default function Nav() {
                   onMouseEnter={handleHover1}
                   onMouseLeave={handleLeave1}
                 >
-                  <a
-                    href="/buy"
+                  <Link
+                    to="/buy"
                     className="text-white font-semibold text-lg px-1 py-2 rounded-md "
                   >
                     Buy
-                  </a>
+                  </Link>
                   <div
                     className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${
                       isMenuOpen1 ? "block" : "hidden"
@@ -333,87 +337,80 @@ export default function Nav() {
                   >
                     <div className="flex ">
                       <div className="w-48">
-                        <a
+                        <Link
                           href="#"
                           className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
                         >
                           Commercials
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Gurugaon
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Delhi
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Noida
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Commercial Property Dubai
-                        </a>
+                        </Link>
                       </div>
 
                       <div className="w-48">
-                        <a
+                        <Link
                           href="#"
                           className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
                         >
                           Residentials
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Gurugaon
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Delhi
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Noida
-                        </a>
-                        <a
+                        </Link>
+                        <Link
                           href="#"
                           className="block text-sm px-4 py-2 hover:bg-gray-200"
                         >
                           Residential Property Dubai
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {token ? (<Link
-                  to={"/postproperty"}
-                  className="text-white font-semibold text-lg"
-                  
-                >
-                Sell
-                </Link>):(<Link
+                <Link
                   to={"/SignIn"}
                   className="text-white font-semibold text-lg"
-                  
                 >
-                Sell
-                </Link>)}
+                  Sell
+                </Link>
                 <Link
                   to={"/projects"}
                   className="text-white font-semibold text-lg"
@@ -421,12 +418,7 @@ export default function Nav() {
                   Projects
                 </Link>
 
-                <Link
-                  to={"/viewallproperty"}
-                  className="text-white font-semibold text-lg"
-                >
-                  ViewAll Property
-                </Link>
+              
               </>
             )}
           </HStack>
@@ -521,34 +513,29 @@ export default function Nav() {
                 </Link>
               ))} */}
 
-              <Link to={"/rent"} className="text-white font-semibold text-lg">
+              <Link to={"/rent"} className="text-white font-semibold mx-3 text-lg">
                 Rent
               </Link>
 
-              <Link to={"/buy"} className="text-white font-semibold text-lg">
+              <Link to={"/buy"} className="text-white font-semibold text-lg mx-3">
                 Buy
               </Link>
 
               <Link
-                to={"/SellProperty"}
-                className="text-white font-semibold text-lg"
+                to={"/SignIn"}
+                className="text-white font-semibold text-lg mx-3"
               >
                 Sell
               </Link>
 
               <Link
                 to={"/projects"}
-                className="text-white font-semibold text-lg"
+                className="text-white font-semibold text-lg mx-3"
               >
                 Projects
               </Link>
 
-              <Link
-                to={"/allproperty"}
-                className="text-white font-semibold text-lg"
-              >
-                ViewAll Property
-              </Link>
+            
             </Stack>
           </Box>
         )}

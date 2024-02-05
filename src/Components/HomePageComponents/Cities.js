@@ -29,33 +29,33 @@ function Cities() {
             </div>
           </div>
           <div className="cvBMLN text-justify">
-            <div className="asdDRsfVN bg-one ">
-              <p className='items-center'>Sohna Road</p>
+            <div className="asdDRsfVN bg-five ">
+              <p className='items-center'>Dwarka Expressway</p>
             </div>
           </div>
           <div className="cvBMLN">
-            <div className="asdDRsfVN bg-two">
-              <p>Golf Course</p>
+            <div className="asdDRsfVN bg-six">
+              <p>New Gurgaon</p>
             </div>
           </div>
           <div className="cvBMLN">
-            <div className="asdDRsfVN bg-three">
-              <p>MG Road</p>
+            <div className="asdDRsfVN bg-seven">
+              <p>Central Gurgaon</p>
             </div>
           </div>
           <div className="cvBMLN">
-            <div className="asdDRsfVN bg-four ">
-              <p className=''>Sikanderpur</p>
+            <div className="asdDRsfVN bg-eight ">
+              <p className=''> Peripheral Road</p>
             </div>
           </div>
           <div className="cvBMLN text-justify">
-            <div className="asdDRsfVN bg-one ">
-              <p className='items-center'>Sohna Road</p>
+            <div className="asdDRsfVN bg-nine ">
+              <p className='items-center'>NH-48</p>
             </div>
           </div>
           <div className="cvBMLN">
-            <div className="asdDRsfVN bg-two">
-              <p>Golf Course</p>
+            <div className="asdDRsfVN bg-ten">
+              <p>Golf Course Road</p>
             </div>
           </div>
         </div>
@@ -128,7 +128,7 @@ const Wrapper = styled.section`
   }
 
   .bg-one {
-    background-image: url(../../OtherImages/sohnaRoad.jpg);
+    background-image: url(../../OtherImages/sohnaRoad.png);
     background-position: center;
   }
 
@@ -147,6 +147,36 @@ const Wrapper = styled.section`
     background-position: center;
   }
 
+  .bg-five {
+    background-image: url(../../OtherImages/capture1.PNG);
+    background-position: center;
+  }
+
+
+  .bg-six {
+    background-image: url(../../OtherImages/capture2.PNG);
+    background-position: center;
+  }
+
+  .bg-seven {
+    background-image: url(../../OtherImages/capture3.PNG);
+    background-position: center;
+  }
+
+  .bg-eight {
+    background-image: url(../../OtherImages/capture4.PNG);
+    background-position: center;
+  }
+
+  .bg-nine {
+    background-image: url(../../OtherImages/capture5.PNG);
+    background-position: center;
+  }
+
+  .bg-ten {
+    background-image: url(../../OtherImages/capture6.PNG);
+    background-position: center;
+  }
   .bg-one:hover,
   .bg-two:hover,
   .bg-three:hover,
@@ -166,8 +196,8 @@ const Wrapper = styled.section`
   .cvBMLN p {
     position: absolute;
     bottom: 0px;
-    left: 30%;
-    right: 30%;
+    left: 10%;
+    right: 10%;
     font-weight: bold;
     color: white;
     transition: 0.5s;

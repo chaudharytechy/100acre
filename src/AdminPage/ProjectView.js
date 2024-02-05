@@ -1,421 +1,331 @@
-
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 const customStyle = {
-    position: "absolute",
-    top: "100px",
-    marginLeft: "250px",
-    right: "auto",
-    width: "80%",
+  position: "absolute",
+  top: "100px",
+  marginLeft: "250px",
+  right: "auto",
+  width: "80%",
 };
 
 function handleFileChange(event) {
-    const input = event.target;
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const previewImage = document.getElementById('previewImage');
-            previewImage.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
+  const input = event.target;
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const previewImage = document.getElementById("previewImage");
+      previewImage.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
 }
 const ProjectView = () => {
-    const [viewDetails, setViewDetails] = useState([]);
-    const [update, SetUpdate] = useState([]);
-    const { projectName } = useParams();
-    //  console.log(projectName,"ghfjfvugyfytf");
-    const { frontImage, otherImage, project_floorplan_Image, project_locationImage } = viewDetails;
+  const [viewDetails, setViewDetails] = useState([]);
+  const { projectName } = useParams();
+  const {
+    otherImage,
+    project_floorplan_Image,
+    projectRedefine_Connectivity,
+    projectRedefine_Business,
+    projectRedefine_Education,
+    projectRedefine_Entertainment,
+    Amenities
+  } = viewDetails;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const res = await axios.get(
-                    `https://acre.onrender.com/projectView/${projectName}`
-                );
-                
-                setViewDetails(res.data.dataview[0]);
-                
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchData();
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `https://acre.onrender.com/projectView/${projectName}`
+        );
+        setViewDetails(res.data.dataview[0]);
+        console.log(res, "dsddasdsd");
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
+  return (
+    <>
+      <Sidebar />
+      <div style={customStyle}>
+        <div className="mx-auto max-w-4xl px-2 sm:px-6 lg:px-8">
+          <div className="card-body">
+            <table className="table table-striped table-bordered">
+              <tbody>
+                <tr>
+                  <th>Front Images</th>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={
+                        viewDetails.frontImage ? viewDetails.frontImage.url : ""
+                      }
+                      alt=""
+                      style={{ maxWidth: "20%" }}
+                      id="previewImage"
+                    />
+                  </td>
+                </tr>
 
-    return (
-        <>
-            <Sidebar />
-            <div style={customStyle}>
-                <div className="mx-auto max-w-4xl px-2 sm:px-6 lg:px-8">
-                    <div className="card-body">
+              
 
-                        <table className="table table-striped table-bordered">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <img
-                                            src={viewDetails.frontImage ? viewDetails.frontImage.url : ""}
-                                            alt=""
-                                            style={{ maxWidth: "20%" }}
-                                            id="previewImage"
-                                        />
-                                        <br />
-                                        <input
-                                            type="file"
-                                            onChange={(e) => handleFileChange(e)}
-                                        />
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Other Images</th>
-                                </tr>
-
-                                <tr>
-                                    <td>
-                                        <section className="w-full mx-4">
-                                            <div className="flex flex-wrap max-w-screen-md ">
-                                                {otherImage &&
-                                                    Array.isArray(otherImage) &&
-                                                    otherImage.length > 0 &&
-                                                    otherImage.map((image, index) => (
-                                                        <article key={index} className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-                                                            <img
-                                                                src={image.url}
-                                                                alt={`Image ${index + 1}`}
-                                                                className="w-full h-full object-cover rounded-lg"
-                                                            />
-                                                        </article>
-
-                                                    ))}
-                                            </div>
-                                        </section>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Project FloorPlan Image</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <section className="w-full mx-4">
-                                            <div className="flex flex-wrap max-w-screen-md ">
-                                                {project_floorplan_Image
-                                                    &&
-                                                    Array.isArray(project_floorplan_Image
-                                                    ) &&
-                                                    project_floorplan_Image
-                                                        .length > 0 &&
-                                                    project_floorplan_Image
-                                                        .map((image, index) => (
-                                                            <article key={index} className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-                                                                <img
-                                                                    src={image.url}
-                                                                    alt={`Image ${index + 1}`}
-                                                                    className="w-full h-full object-cover rounded-lg"
-                                                                />
-                                                            </article>
-
-                                                        ))}
-                                            </div>
-                                        </section>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Project Location Image</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <section className="w-full mx-4">
-                                            <div className="flex flex-wrap max-w-screen-md ">
-                                                {project_locationImage
-
-                                                    &&
-                                                    Array.isArray(project_locationImage
-
-                                                    ) &&
-                                                    project_locationImage
-
-                                                        .length > 0 &&
-                                                    project_locationImage
-
-                                                        .map((image, index) => (
-                                                            <article key={index} className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2">
-                                                                <img
-                                                                    src={image.url}
-                                                                    alt={`Image ${index + 1}`}
-                                                                    className="w-full h-full object-cover rounded-lg"
-                                                                />
-                                                            </article>
-
-                                                        ))}
-                                            </div>
-                                        </section>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Property Name :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input
-                                                    type="text"
-                                                    className="outline-none"
-                                                    value={viewDetails.projectName}
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, projectName: e.target.value })}
-                                                />
-                                            </span>
-                                        </span>
-                                    </th>
-
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Builder Name :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.builderName
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, builderName
-                                                            : e.target.value
-                                                    })} />
-                                            </span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Address :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectAddress}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, projectAddress: e.target.value })} />
-                                            </span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            City:{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.city}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, city: e.target.value })} />
-                                            </span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            State :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.state}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, state: e.target.value })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Overview :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectOverview}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, projectOverview: e.target.value })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Redefine Business :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectRedefine_Business
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectRedefine_Business
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Redefine Connectivity :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectRedefine_Connectivity
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectRedefine_Connectivity
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Redefine Education :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectRedefine_Education
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectRedefine_Education
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Redefine Entertainment :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectRedefine_Entertainment
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectRedefine_Entertainment
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Rera No :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectReraNo
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectReraNo
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Project Redefine Entertainment :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.projectRedefine_Entertainment
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, projectRedefine_Entertainment
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                    
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            About Developer :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.AboutDeveloper
-                                                }
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({
-                                                        ...viewDetails, AboutDeveloper
-                                                            : e.target.value
-                                                    })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                              
-
-                               
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Amenities :{' '}
-                                            <span style={{ color: 'black', outline: "none", fontWeight: 'normal' }}>
-                                                <input
-                                                    type="text"
-                                                    className="outline-none"
-                                                    value={viewDetails.Amenities && viewDetails.Amenities.length > 0 ? viewDetails.Amenities.join(', ') : ''}
-                                                    onChange={(e) => {
-                                                        const newAmenities = e.target.value.split(',').map((item) => item.trim());
-                                                        setViewDetails((prevDetails) => ({
-                                                            ...prevDetails,
-                                                            amenities: [...newAmenities],
-                                                        }));
-                                                    }}
-                                                />
-                                            </span>
-                                        </span>
-
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Type :{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.type}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, type: e.target.value })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-
-                                <tr>
-                                    <th>
-                                        <span className="text-red-600 font-semibold ">
-                                            Available Date:{' '}
-                                            <span style={{ color: 'black', fontWeight: 'normal' }}>
-                                                <input type="text" value={viewDetails.availableDate}
-                                                    className="outline-none"
-                                                    onChange={(e) => setViewDetails({ ...viewDetails, availableDate: e.target.value })} /></span>
-                                        </span>
-                                    </th>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <Link to="#">
-                            <button
-                                type="button"
-                                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+                <tr>
+                  <th>Project FloorPlan Image</th>
+                </tr>
+                <tr>
+                  <td>
+                    <section className="w-full mx-4">
+                      <div className="flex flex-wrap max-w-screen-md ">
+                        {project_floorplan_Image &&
+                          Array.isArray(project_floorplan_Image) &&
+                          project_floorplan_Image.length > 0 &&
+                          project_floorplan_Image.map((image, index) => (
+                            <article
+                              key={index}
+                              className="group w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
                             >
+                              <img
+                                src={image.url}
+                                alt={`Image ${index + 1}`}
+                                className="w-full h-full object-cover rounded-lg"
+                              />
+                            </article>
+                          ))}
+                      </div>
+                    </section>
+                  </td>
+                </tr>
 
-                                Update
-                            </button>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+                <tr>
+                  <th>Project Location Image</th>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={
+                        viewDetails.project_locationImage
+                          ? viewDetails.project_locationImage.url
+                          : ""
+                      }
+                      alt=""
+                      style={{ maxWidth: "20%" }}
+                      id="previewImage"
+                    />
+                  </td>
+                </tr>
 
-        </>
-    );
+                <tr>
+                  <th>Project Logo Image</th>
+                </tr>
+                <tr>
+                  <td>
+                    <img
+                      src={
+                        viewDetails.logo
+                          ? viewDetails.logo.url
+                          : ""
+                      }
+                      alt=""
+                      style={{ maxWidth: "20%" }}
+                      id="previewImage"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Property Name :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.projectName}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Builder Name :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.builderName}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Address :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.projectAddress}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      City:{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.city}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      State :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.state}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Overview :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {viewDetails.projectOverview}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold">
+                      Project Redefine  Connectivity:
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {projectRedefine_Connectivity &&
+                        Array.isArray(projectRedefine_Connectivity) &&
+                        projectRedefine_Connectivity.length > 0
+                          ? projectRedefine_Connectivity.map((item, index) => (
+                              <span key={index}> {" "}
+                               {item}
+                              </span>
+                            ))
+                          : " No connectivity information available."}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Redefine Business :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {projectRedefine_Business && Array.isArray(projectRedefine_Business) && 
+                        projectRedefine_Business.length > 0 ? projectRedefine_Business.map((item,index)=>(
+                          <span key={index}>{" "}
+                          {item}
+                          </span>
+                        )) :" No Business information available."}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Redefine Education :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                      {projectRedefine_Education && Array.isArray(projectRedefine_Education) && 
+                      projectRedefine_Education.length > 0 ? projectRedefine_Education.map((item,index)=>(
+                        <span key={index}>
+                        {item}
+                        </span>
+                      )): "No Project Redefine Education"}
+
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+                <tr>
+
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Redefine Entertainment :{" "}
+                      <span
+                        style={{ color: "black", fontWeight: "normal" }}>
+                          {projectRedefine_Entertainment && Array.isArray (projectRedefine_Entertainment) && 
+                          projectRedefine_Entertainment.length > 0 ? projectRedefine_Entertainment.map((item,index)=>(
+                            <span key={index}>{item}</span>
+                          )) :" No  Project Redefine Entertainment"
+                          }
+                        </span>
+                    </span>
+                  </th>
+                </tr>
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Rera No :{" "}
+                      <span
+                        style={{ color: "black", fontWeight: "normal" }}
+                      >{viewDetails.projectReraNo}</span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      About Developer :{" "}
+                      <span
+                        style={{ color: "black", fontWeight: "normal" }}
+                      > {viewDetails.AboutDeveloper}</span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Amenities :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        {Amenities && Array.isArray(Amenities) && Amenities.length > 0 ? Amenities.map((item,index)=>(
+                             <span key={index}>
+                              {item}
+                             </span>
+                        )):"No Amenities"}
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Type :{" "}
+                      <span
+                        style={{ color: "black", fontWeight: "normal" }}
+                      >{viewDetails.type}</span>
+                    </span>
+                  </th>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default ProjectView;

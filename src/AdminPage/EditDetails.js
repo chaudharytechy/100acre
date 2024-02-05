@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
-import { Link, useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 const customStyle = {
@@ -22,18 +22,38 @@ function handleFileChange(event) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
 const EditDetails = () => {
-  const [viewDetails, setViewDetails] = useState([]);
-  const [update, SetUpdate] = useState([]);
+  const [values, setValues] = useState({
+    propertyType: "",
+    propertyName: "",
+    address: "",
+    city: "",
+    state: "",
+    price: "",
+    area: "",
+    descripation: "",
+    landMark: "",
+    amenities: [],
+    builtYear: "",
+    furnishing: "",
+    type: "",
+    availableDate: "",
+    propertyLooking: "Select Property Type",
+    subType: "",
+  });
+
   const { id } = useParams();
-  const { frontImage, otherImage } = viewDetails;
+  const { otherImage } = values;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get( `https://acre.onrender.com/postPerson/propertyoneEdit/${id}`);
-        setViewDetails(res.data.data);
-        console.log(res, "ViewDetalisl")
+        const res = await axios.get(
+          `https://acre.onrender.com/postPerson/propertyoneEdit/${id}`
+        );
+        setValues(res.data.data.postProperty[0]);
+        console.log(values, "Value edit client")
       } catch (error) {
         console.log(error);
       }
@@ -41,42 +61,36 @@ const EditDetails = () => {
     fetchData();
   }, []);
 
-  
+  const handleUpdateUser = async () => {
+    try {
+      const response = await axios.post(`https://acre.onrender.com/postPerson/propertyoneUpdate/${id}`, values);
+      if (response.ok) {
+        alert("Data updated successfully");
+        console.log("User updated successfully");
+      } else {
+        console.error("Failed to update user");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+    }
+  };
+
   return (
     <>
       <Sidebar />
       <div style={customStyle}>
         <div className="mx-auto max-w-4xl px-2 sm:px-6 lg:px-8">
-          <div class="flex items-center">
-            <input
-              id="link-checkbox"
-              type="checkbox"
-              value=""
-              className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 dark:focus:ring-red-600  dark:bg-gray-700 dark:border-gray-600"
-            />
-            <label
-              for="link-checkbox"
-              class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >
-              I agree with the{" "}
-              <a
-                href="#"
-                className="text-red-600 dark:text-red-500 hover:underline"
-              >
-                Verify
-              </a>
-              .
-            </label>
-          </div>
           <div className="card-body">
             <table className="table table-striped table-bordered">
               <tbody>
                 <tr>
+                  <th>Front Images</th>
+                </tr>
+
+                <tr>
                   <td>
                     <img
-                      src={
-                        viewDetails.frontImage ? viewDetails.frontImage.url : ""
-                      }
+                      src={values.frontImage ? values.frontImage.url : ""}
                       alt=""
                       style={{ maxWidth: "20%" }}
                       id="previewImage"
@@ -110,9 +124,20 @@ const EditDetails = () => {
                             </article>
                           ))}
                       </div>
+                      <br />
+                        <input
+                          type="file"
+                          name="otherImage"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            setValues({ ...values, otherImage: file });
+                          }}
+                        />
                     </section>
                   </td>
                 </tr>
+
+  
 
                 <tr>
                   <th>
@@ -121,11 +146,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
+                          value={values.propertyName}
                           className="outline-none"
-                          value={viewDetails.propertyName}
+                          name="propertyName"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               propertyName: e.target.value,
                             })
                           }
@@ -134,6 +160,7 @@ const EditDetails = () => {
                     </span>
                   </th>
                 </tr>
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -141,11 +168,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.propertyType}
+                          value={values.propertyType}
                           className="outline-none"
+                          name="propertyType"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               propertyType: e.target.value,
                             })
                           }
@@ -162,11 +190,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.address}
+                          value={values.address}
                           className="outline-none"
+                          name="address"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               address: e.target.value,
                             })
                           }
@@ -183,11 +212,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.city}
+                          value={values.city}
                           className="outline-none"
+                          name="city"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               city: e.target.value,
                             })
                           }
@@ -204,11 +234,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.state}
+                          value={values.state}
+                          name="state"
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               state: e.target.value,
                             })
                           }
@@ -225,11 +256,12 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.price}
+                          name="price"
+                          value={values.price}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               price: e.target.value,
                             })
                           }
@@ -242,15 +274,38 @@ const EditDetails = () => {
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
-                      Description :{" "}
+                      Area :{" "}
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.descripation}
+                          name="area"
+                          value={values.area}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
+                              area: e.target.value,
+                            })
+                          }
+                        />
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Project Description :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        <input
+                          type="text"
+                          name="descripation"
+                          value={values.descripation}
+                          className="outline-none"
+                          onChange={(e) =>
+                            setValues({
+                              ...values,
                               descripation: e.target.value,
                             })
                           }
@@ -260,6 +315,8 @@ const EditDetails = () => {
                   </th>
                 </tr>
 
+            
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -267,12 +324,13 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.landmark}
+                          name="landMark"
+                          value={values.landMark}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
-                              landmark: e.target.value,
+                            setValues({
+                              ...values,
+                              landMark: e.target.value,
                             })
                           }
                         />
@@ -281,18 +339,20 @@ const EditDetails = () => {
                   </th>
                 </tr>
 
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
-                      Build Year:{" "}
+                      Built Year :{" "}
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.builtYear}
+                          name="builtYear"
+                          value={values.builtYear}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               builtYear: e.target.value,
                             })
                           }
@@ -301,6 +361,8 @@ const EditDetails = () => {
                     </span>
                   </th>
                 </tr>
+
+
 
                 <tr>
                   <th>
@@ -315,27 +377,45 @@ const EditDetails = () => {
                       >
                         <input
                           type="text"
+                          value={values.Amenities}
                           className="outline-none"
-                          value={
-                            viewDetails.amenities &&
-                            viewDetails.amenities.length > 0
-                              ? viewDetails.amenities.join(", ")
-                              : ""
+                          onChange={(e) =>
+                            setValues({
+                              ...values,
+                              Amenities: e.target.value,
+                            })
                           }
-                          onChange={(e) => {
-                            const newAmenities = e.target.value
-                              .split(",")
-                              .map((item) => item.trim());
-                            setViewDetails((prevDetails) => ({
-                              ...prevDetails,
-                              amenities: [...newAmenities],
-                            }));
-                          }}
+                        />
+                       
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                      Furnishing :{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        <input
+                          type="text"
+                          name="furnishing"
+                          value={values.furnishing}
+                          className="outline-none"
+                          onChange={(e) =>
+                            setValues({
+                              ...values,
+                              furnishing: e.target.value,
+                            })
+                          }
                         />
                       </span>
                     </span>
                   </th>
                 </tr>
+
+
                 <tr>
                   <th>
                     <span className="text-red-600 font-semibold ">
@@ -343,11 +423,11 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.type}
+                          value={values.type}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               type: e.target.value,
                             })
                           }
@@ -364,12 +444,36 @@ const EditDetails = () => {
                       <span style={{ color: "black", fontWeight: "normal" }}>
                         <input
                           type="text"
-                          value={viewDetails.availableDate}
+                          name="availableDate"
+                          value={values.availableDate}
                           className="outline-none"
                           onChange={(e) =>
-                            setViewDetails({
-                              ...viewDetails,
+                            setValues({
+                              ...values,
                               availableDate: e.target.value,
+                            })
+                          }
+                        />
+                      </span>
+                    </span>
+                  </th>
+                </tr>
+
+
+                <tr>
+                  <th>
+                    <span className="text-red-600 font-semibold ">
+                    Select Property Type:{" "}
+                      <span style={{ color: "black", fontWeight: "normal" }}>
+                        <input
+                          type="text"
+                          name="propertyLooking"
+                          value={values.propertyLooking}
+                          className="outline-none"
+                          onChange={(e) =>
+                            setValues({
+                              ...values,
+                              propertyLooking: e.target.value,
                             })
                           }
                         />
@@ -380,14 +484,13 @@ const EditDetails = () => {
               </tbody>
             </table>
 
-           
-              <button
-                type="button"
-                class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-              >
-                Update
-              </button>
-          
+            <button
+              type="button"
+              onClick={handleUpdateUser}
+              className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+            >
+              Update
+            </button>
           </div>
         </div>
       </div>

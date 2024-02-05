@@ -53,9 +53,7 @@ function Home() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    console.log(trendingProject, "final");
-  }, [trendingProject]);
+  useEffect(() => {}, [trendingProject]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,9 +69,7 @@ function Home() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    // console.log(featuredProject, "final");
-  }, [featuredProject]);
+  useEffect(() => {}, [featuredProject]);
 
   const {
     PreLaunchProperties,
@@ -93,10 +89,8 @@ function Home() {
     setModalIsOpen(false);
   };
 
-  // console.log(PreLuanchSimilarProperties);
-
   return (
-    <Wrapper className="section">
+    <Wrapper className="section" style={{ overflowX: "hidden" }}>
       <Nav />
       <Helmet>
         <meta
@@ -109,16 +103,16 @@ function Home() {
         </title>
       </Helmet>
 
-      <div className="h-screen w-full md:h-60 lg:h-96 p-16 md:p-2 box-border pt-3 djqwUUJNCO 9999">
-        <div className="mt-12 lg:pt-14 sm:pt-1 sm:h-8  md:pt-0 ">
+      <div className="h-screen w-full  md:h-60 lg:h-96 sm:h-24 p-8 box-border djqwUUJNCO 9999 mb-4  ">
+        <div className="mt-12 lg:pt-14 sm:pt-1 sm:h-6  md:pt-0 ">
           <SearchBar />
         </div>
       </div>
 
-      <SmallPopForm />
-
-      <div className="sticky-quote-cta ">
-        <a onClick={handleShow}>For any Queries</a>
+      {/* <div className="sticky-quote-cta ">
+        <a className="text-lg mx-2" onClick={handleShow}>
+          Enquire Now
+        </a>
 
         <ReactModal isOpen={modalIsOpen} style={customStyles}>
           <strong className="text-black font-semibold  not-italic lg:text-2xl ml-2 sm:text-sm text-justify ">
@@ -126,7 +120,7 @@ function Home() {
           </strong>
 
           <button onClick={handleClose}>
-            <i class="fa-regular fa-rectangle-xmark lg:text-3xl sm:text-xl lg:ml-72 sm:ml:2"></i>
+            <i class="fa-regular fa-rectangle-xmark lg:text-3xl sm:text-xl lg:ml-72 sm:ml:2 bg-[#e53e3e] "></i>
           </button>
 
           <form className="px-2 pt-2 ">
@@ -182,40 +176,50 @@ function Home() {
             </button>
           </form>
         </ReactModal>
-      </div>
+      </div> */}
 
       <div>
         {" "}
-        <div
-          className="xjUWI"
+        {/* <div
+          className="xjUWI  lg:px-8 "
           style={{
             fontSize: "xx-large",
-            margin: "30px 60px",
             fontWeight: "600",
+            whiteSpace: "nowrap", // Ensures text stays in one line
+            overflow: "hidden", // Hides overflowed content
+            textOverflow: "ellipsis",
+          }}
+        >
+          Trending Properties
+        </div> */}
+        <div
+          className="xjUW "
+          style={{
+            fontSize: "xx-large",
+            margin: "20px 40px 5px",
+            fontWeight: "600",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
           }}
         >
           Trending Properties
         </div>
-        <div class="text-right lg:px-28 md:px-auto sm:px-auto">
-              <a href="" className="text-red-600 px-2 py-1 rounded-md">
-                viewAll
-              </a>
-            </div>
         {
-          <section className="flex flex-col   bg-white">
-            <div className="grid max-w-md grid-cols-1  sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
+          <section className="flex flex-col bg-white ">
+            <div className="grid max-w-md grid-cols-1 p-4  sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
               {trendingProject.map((item, index) => {
                 const pName = item.projectName;
                 return (
                   <Link to={`/${pName}`} target="_blank">
                     <article
                       key={index}
-                      className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl"
+                      className="mb-4  overflow-hidden rounded-xl  border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl"
                     >
                       <div>
                         <img
                           src={item.frontImage.url}
-                          alt=""
+                          alt="image"
                           className="w-full h-48 object-fit"
                         />
                       </div>
@@ -251,7 +255,6 @@ function Home() {
                 );
               })}
             </div>
-            
           </section>
         }
       </div>
@@ -272,7 +275,7 @@ function Home() {
       <SpacesAvailable />
 
       <div
-        className="xjUW text-center"
+        className="xjUW "
         style={{
           fontSize: "xx-large",
           margin: "20px 60px",
@@ -285,7 +288,7 @@ function Home() {
 
       {
         <section className="flex flex-col  bg-white">
-          <div className="grid max-w-md grid-cols-1   sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
+          <div className="grid max-w-md grid-cols-1 p-4  sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
             {featuredProject.map((item, index) => {
               const pName = item.projectName;
               return (
@@ -389,6 +392,7 @@ function Home() {
 }
 
 export default Home;
+
 const Wrapper = styled.section`
   .dd-m-whatsapp {
     position: fixed;
@@ -462,19 +466,34 @@ const Wrapper = styled.section`
       margin: 30px 30px !important;
     }
     .djqwUUJNCO {
-      height: 60vh !important;
-      background-image: url("../../Images/Capture2Mobile.png");
+      height: 17vh !important;
+      background-image: url("../../Images/1.png");
       background-repeat: no-repeat;
       background-size: cover;
-      background-position: left;
+      background-position: center;
     }
   }
-  @media screen and (max-width: 1800px) and (min-width: 601px) {
+
+  @media screen and (max-width: 425px) and (min-width: 425px) {
+    .xjUWI {
+      font-size: x-large;
+      margin: 10px 30px !important;
+    }
     .djqwUUJNCO {
-      background-image: url("../../Images/banner3.jpg");
+      height: 60vh !important;
+      background-image: url("../../Images/1.png");
       background-repeat: no-repeat;
       background-size: cover;
-      height: 60vh;
+      background-position: center;
+    }
+  }
+
+  @media screen and (max-width: 1800px) and (min-width: 601px) {
+    .djqwUUJNCO {
+      background-image: url("../../Images/BannerImage3.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
   }
 

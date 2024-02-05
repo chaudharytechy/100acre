@@ -5,14 +5,26 @@ import axios from "axios";
 const NewSellProperty = () => {
   const storedSellerId = localStorage.getItem("mySellerId");
   const sellerId = JSON.parse(storedSellerId);
-  const propertyTypes = [
-    "Select Property Type",
-    "Commercial",
-    "Residential",
-  ];
+  const propertyTypes = ["Select Property Type", "Commercial", "Residential"];
   const subTypes = {
-    Commercial: ["Office", "Retail", "Industrial", "Plot / Land", "Storage", "Hospitality", "Other"],
-    Residential: ["Flat/Apartment", "Independent House / Villa", "Independent / Builder Floor", "1 RK/ Studio Apartment", "Serviced Apartment", "Farmhouse", "Other"],
+    Commercial: [
+      "Office",
+      "Retail",
+      "Industrial",
+      "Plot / Land",
+      "Storage",
+      "Hospitality",
+      "Other",
+    ],
+    Residential: [
+      "Flat/Apartment",
+      "Independent House / Villa",
+      "Independent / Builder Floor",
+      "1 RK/ Studio Apartment",
+      "Serviced Apartment",
+      "Farmhouse",
+      "Other",
+    ],
     // Add more subtypes as needed
   };
 
@@ -33,9 +45,36 @@ const NewSellProperty = () => {
     availabledate: "",
     selectoption: "Select Property Type",
     subType: "",
-  });
+  });  
 
- 
+
+  const resetData = () =>{
+    setSellProperty({
+      propertyType: "",
+      propertyName: "",
+      address: "",
+      city: "",
+      state: "",
+      price: "",
+      area: "",
+      description: "",
+      landmark: "",
+      amenities: [],
+      builtyear: "",
+      furnishing: "",
+      type: "",
+      availabledate: "",
+      selectoption: "Select Property Type",
+      subType: "",
+    })
+  }
+
+  const resetImageData = () =>{
+    setFileData({
+      frontImage: "",
+      otherImage: [],
+    })
+  }
 
   const handleChangeValue = (e) => {
     const { name, value } = e.target;
@@ -66,35 +105,78 @@ const NewSellProperty = () => {
     otherImage: [],
   });
 
-
   const otherImageLength = fileData.otherImage.length;
+
+  // const submitSellPropertyDetails = async (e) => {
+  //   e.preventDefault();
+  //   const apiEndpoint = `https://acre.onrender.com/postPerson/propertyInsert/${sellerId}`;
+
+  //   const formDataAPI = new FormData();
+
+  //   for (const key in sellProperty) {
+  //     formDataAPI.append(key, sellProperty[key]);
+  //   }
+  //   for (let i = 0; i < otherImageLength; i++) {
+  //     formDataAPI.append("otherImage", fileData.otherImage[i]);
+  //   }
+
+  //   formDataAPI.append("frontImage", fileData.frontImage);
+
+  //   try {
+  //     const response = await axios.post(apiEndpoint, formDataAPI);
+  //     alert("Property posted")
+  //     setSellProperty({
+  //       propertyType: null,
+  //       propertyName: null,
+  //       address: null,
+  //       city: null,
+  //       state: null,
+  //       price: null,
+  //       area: null,
+  //       description: null,
+  //       landmark: null,
+  //       amenities: null,
+  //       builtyear: null,
+  //       furnishing: null,
+  //       type: null,
+  //       availabledate: null,
+  //       selectoption: null,
+  //       subType: null,
+  //     });
+      
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
+  //   }
+  // };
+
 
   const submitSellPropertyDetails = async (e) => {
     e.preventDefault();
     const apiEndpoint = `https://acre.onrender.com/postPerson/propertyInsert/${sellerId}`;
-
-
+  
     const formDataAPI = new FormData();
-
+  
     for (const key in sellProperty) {
       formDataAPI.append(key, sellProperty[key]);
     }
-    for (let i = 0; i <otherImageLength; i++) {
-      formDataAPI.append('otherImage', fileData.otherImage[i]);  
+  
+    for (let i = 0; i < otherImageLength; i++) {
+      formDataAPI.append(`otherImage_${i}`, fileData.otherImage[i]);
     }
   
     formDataAPI.append("frontImage", fileData.frontImage);
   
-    
     try {
-     
       const response = await axios.post(apiEndpoint, formDataAPI);
-      console.log("data post", response);
-  
+      alert("Property posted");
+      resetData();
+      resetImageData();
+      
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+  
 
   const handleChangeValueAmenities = (event) => {
     if (event.target.name === "amenities") {
@@ -111,14 +193,12 @@ const NewSellProperty = () => {
     }
   };
 
-
   const handleOptionClick = (option) => {
     setSellProperty({
       ...sellProperty,
       propertyLooking: option,
     });
   };
-
 
   const handleFileChange = (e, key) => {
     const newFileData = { ...fileData };
@@ -129,19 +209,18 @@ const NewSellProperty = () => {
   const handleOtherImageChange = (e) => {
     var files = e.target.files;
     if (files) {
-        const updatedOtherImage = [];
-        for (let i = 0; i < files.length; i++) {
-            updatedOtherImage.push(files[i]);
-        }
-        setFileData({
-            ...fileData,
-            otherImage: updatedOtherImage,
-        });
+      const updatedOtherImage = [];
+      for (let i = 0; i < files.length; i++) {
+        updatedOtherImage.push(files[i]);
+      }
+      setFileData({
+        ...fileData,
+        otherImage: updatedOtherImage,
+      });
     } else {
-        console.error("No files selected");
+      console.error("No files selected");
     }
   };
-  
 
   return (
     <>
@@ -171,32 +250,35 @@ const NewSellProperty = () => {
           </div>
 
           <div className="mt-8 mb-8 max-w-3/4  shadow-2xl sm:rounded-lg sm:shadow-lg lg:mt-0  bg-red-400 px-1">
+            <div className="m-2">
+              <p className="text-2xl mx-2 text-white">
+                You're looking to<span>....</span>
+              </p>
 
-          <div className="m-2">
-      <p className="text-2xl mx-2 text-white">
-        You're looking to<span>....</span>
-      </p>
+              <p>
+                <span
+                  className={`mx-2 px-3 py-1 rounded-2xl text-white border-2 hover:bg-red-600 hover:text-white ${
+                    sellProperty.propertyLooking === "Sell"
+                      ? "bg-red-600 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handleOptionClick("Sell")}
+                >
+                  Sell
+                </span>{" "}
+                <span
+                  className={`px-3 text-white py-1 rounded-2xl border-2 hover:bg-red-600 hover:text-white ${
+                    sellProperty.propertyLooking === "rent"
+                      ? "bg-red-600 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handleOptionClick("rent")}
+                >
+                  Rent/Lease
+                </span>{" "}
+              </p>
+            </div>
 
-      <p>
-        <span
-          className={`mx-2 px-3 py-1 rounded-2xl text-white border-2 hover:bg-red-600 hover:text-white ${
-            sellProperty.propertyLooking === 'Sell' ? 'bg-red-600 text-white' : ''
-          }`}
-          onClick={() => handleOptionClick('Sell')}
-        >
-          Sell
-        </span>{" "}
-        <span
-          className={`px-3 text-white py-1 rounded-2xl border-2 hover:bg-red-600 hover:text-white ${
-            sellProperty.propertyLooking === 'Rent/Lease' ? 'bg-red-600 text-white' : ''
-          }`}
-          onClick={() => handleOptionClick('Rent/Lease')}
-        >
-          Rent/Lease
-        </span>{" "}
-      </p>
-    </div>
-            
             <div className="p-1 sm:p-8">
               <div className="grid gap-3 md:grid-cols-2">
                 <div>
@@ -221,9 +303,6 @@ const NewSellProperty = () => {
                     value={sellProperty.propertyType}
                     onChange={handleChangeValue}
                   >
-                    {/* <option value="">
-                      Select {sellProperty.selectoption} Type
-                    </option> */}
                     {subTypes[sellProperty.selectoption].map(
                       (subType, index) => (
                         <option key={index} value={subType}>
@@ -231,8 +310,8 @@ const NewSellProperty = () => {
                         </option>
                       )
                     )}
-                  </select> 
-                )}  
+                  </select>
+                )}
               </div>
 
               <div>
@@ -386,10 +465,12 @@ const NewSellProperty = () => {
 
               <div className="grid gap-3 md:grid-cols-2 text-gray-500">
                 <div>
+                <label htmlFor="frontImage" className=" text-white mx-3 ">
+                    Upload Front Images:
+                  </label>
                   <input
                     type="file"
                     name="frontImage"
-                    // value={sellProperty.frontImage}
                     onChange={(e) => handleFileChange(e, "frontImage")}
                     accept="image/*"
                     className="mt-2 h-10 w-full rounded-md bg-white border text-gray-500 px-3 outline-none pt-1"
@@ -397,13 +478,16 @@ const NewSellProperty = () => {
                 </div>
 
                 <div>
+                  <label htmlFor="otherImage" className=" text-white mx-3 ">
+                    Upload Other Images:
+                  </label>
                   <input
                     type="file"
                     multiple
                     name="otherImage"
-                    // value={sellProperty.otherImage}
                     onChange={handleOtherImageChange}
                     accept="image/*"
+                    id="otherImage"
                     className="mt-2 h-10 w-full rounded-md bg-white border text-gray-500 px-3 outline-none pt-1 mb-3"
                   />
                 </div>
