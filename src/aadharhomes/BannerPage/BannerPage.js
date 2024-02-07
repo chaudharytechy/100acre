@@ -56,14 +56,14 @@ const BannerPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {}, [projectViewDetails]);
+  useEffect(() => { }, [projectViewDetails]);
 
 
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
     mobile: "",
-  
+
   });
 
 
@@ -77,7 +77,7 @@ const BannerPage = () => {
   const userSubmitDetails = (e) => {
     e.preventDefault();
     const { mobile } = userDetails;
-   
+
     if (mobile) {
       axios
         .post("https://acre.onrender.com/userInsert", {
@@ -111,7 +111,7 @@ const BannerPage = () => {
   const popSubmitDetails = (e) => {
     e.preventDefault();
     const { mobile } = popDetails;
-   
+
     if (mobile) {
       axios
         .post("https://acre.onrender.com/userInsert", {
@@ -150,7 +150,7 @@ const BannerPage = () => {
   } = projectViewDetails;
 
   return (
-    <Wrapper className="section" style={{overflowX:"hidden"}}>
+    <Wrapper className="section" style={{ overflowX: "hidden" }}>
       <>
         <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-2 lg:flex-row lg:items-center">
           <div>
@@ -259,7 +259,7 @@ const BannerPage = () => {
                   {projectViewDetails.projectBgContent}
                 </h2>
                 <h4 className="mb-6 text-sm lg:text-3xl md:text-xl sm:text-sm font-extrabold text-[#ffc067]">
-                  {projectViewDetails.projectName} Facing Apartment
+                  {projectViewDetails.projectName}
                 </h4>
               </div>
             </div>
@@ -288,7 +288,7 @@ const BannerPage = () => {
                         </h2>
                         <input
                           className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                         
+
                           type="text"
                           placeholder="Enter your name"
                           name="name"
@@ -299,7 +299,7 @@ const BannerPage = () => {
                       <div className="mb-2">
                         <input
                           class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                         
+
                           type="email"
                           placeholder="Enter your email"
                           name="email"
@@ -310,7 +310,7 @@ const BannerPage = () => {
                       <div className="mb-2">
                         <input
                           class="appearance-none border  rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                         
+
                           rows="2"
                           placeholder="Enter your mobile"
                           name="mobile"
@@ -359,13 +359,7 @@ const BannerPage = () => {
           </span>
         </div>
 
-        <div className="max-w-full">
-          <img
-            src={projectViewDetails?.project_locationImage?.url}
-            alt="location image"
-            className="w-screen h-screen"
-          />
-        </div>
+        
 
         {/* <div className="sticky-quote-cta ">
         <a onClick={handleShow}>For any Queries</a>
@@ -435,20 +429,20 @@ const BannerPage = () => {
 
         <div className="text-center pt-4">
           <strong className="font-semibold text-2xl md:text-xl sm:text-base text-[#012e29]">
-            Central Park Sector 104 Gallery
+            {projectViewDetails.projectName}{" "} Sizes & Prices
           </strong>
         </div>
 
         <div className="flex flex-col w-full   border-black pt-4">
           <div className="flex flex-shrink-0 bg-black text-white">
             <div className="flex items-center justify-center flex-grow w-0 h-10 px-2 border-b border-l border-black">
-              <span>Project Size</span>
+              <span>Unit Size</span>
             </div>
             <div className="flex items-center justify-center flex-grow w-0 h-10 px-2 border-b border-l border-black">
-              <span>Project Type</span>
+              <span>Unit Type</span>
             </div>
             <div className="flex items-center justify-center flex-grow w-0 h-10 px-2 border-b border-l border-black">
-              <span>Project Price</span>
+              <span>Unit Price</span>
             </div>
           </div>
 
@@ -476,7 +470,7 @@ const BannerPage = () => {
 
         <div className="text-center   text-black font-semibold m-4 md:m-8 lg:m-12 xl:m-20 text-sm sm:text-base md:text-lg lg:text-xl xl:text-3xl mt-4">
           <span className="leading-relaxed">
-            URBAN LIVING REDEFINING CITY LIFE
+            {projectViewDetails.projectName}{" "} Floor Plan
           </span>
         </div>
 
@@ -595,39 +589,11 @@ const BannerPage = () => {
           </div>
         </div>
 
-        <div className="bg-gray-100 font-sans ">
-          <div className="container mx-auto p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4  ">
-              <div className="bg-white p-6 rounded-md shadow-md transition hover:translate-x-2 transform-gpu">
-                <span className="font-semibold mb-2 text-center text-3xl">
-                  50+ <br /> Projects
-                </span>
-              </div>
-
-              <div className="bg-white p-6 rounded-md shadow-md transition hover:translate-x-2 ">
-                <span className="text-3xl font-semibold mb-2 text-center">
-                  10K+ Customers
-                </span>
-              </div>
-
-              <div className="bg-white p-6 rounded-md shadow-md transition hover:translate-x-2 transform-gpu">
-                <span className="text-3xl font-semibold mb-2 text-center">
-                  6 <br /> Cities
-                </span>
-              </div>
-
-              <div className="bg-white p-6 rounded-md shadow-md transition hover:translate-x-2 transform-gpu">
-                <span className="text-3xl font-semibold mb-2 text-center">
-                  0 Debt & Litigation
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+       
 
         <div className="text-center text-[#012e29] font-semibold mt-2 lg:pt-4 md:pt-3  text-sm sm:text-base md:text-lg lg:text-3xl sm:pt-0 px-3">
           <p className="leading-relaxed">
-            LUXURY LIVING WITH A GLOBAL PERSPECTIVE
+            {projectViewDetails.projectName}{" "} Amenities
           </p>
         </div>
 
@@ -649,18 +615,27 @@ const BannerPage = () => {
             ))}
         </div>
 
+        <div className="max-w-full">
+          <img
+            src={projectViewDetails?.project_locationImage?.url}
+            alt="location image"
+            className="w-screen h-screen"
+          />
+        </div>
+        
+
         <div className="text-center pt-4">
           <strong className=" text-justify lg:text-3xl sm:text-sm font-extrabold lg:p-8 sm:p-0 text-[#012e29]">
-            DOMINANT PLAYERS IN BUILDING INFRASTRUCTURE & REALTY
+            About{" "} {projectViewDetails.builderName}
           </strong>
         </div>
 
         <div class="flex items-center justify-center pt-2" id="about">
-          <img
+          {/* <img
             class="object-cover object-center rounded-xl w-24 h-auto"
             src={projectViewDetails?.logo?.url}
             alt="logo"
-          />
+          /> */}
         </div>
 
         <div className="flex flex-col lg:flex-row items-center justify-center lg:space-x-8 mx-4 pt-2 lg:mx-0">

@@ -174,7 +174,7 @@ export default function Nav() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  
+
 
   const handleLoginRegisterClick = () => {
     setShowLoginModal(true);
@@ -182,7 +182,7 @@ export default function Nav() {
   };
 
   const history = useNavigate();
-  
+
   const [token, setToken] = useState();
   const checkUserAuth = () => {
     const storedToken = localStorage.getItem("myToken");
@@ -197,313 +197,331 @@ export default function Nav() {
   //   backgroundColor: "red",
   //   background: "linear-gradient(to bottom, #9baac2, #ff0000)",
   // };
-  
+
 
   return (
     <Wrapper className="section" >
       <Box>
-      <Box bg="red" px={{ base: 0, md: 4, lg: 7 }}>
-        <Flex h={14} alignItems="center" justifyContent="space-between">
-          <IconButton
-            size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
-            display={{ lg: "none" }}
-            onClick={isOpen ? onClose : onOpen}
-            variant="unstyled"
-            _hover={{ bg: "none" }}
-            _active={{ bg: "none" }}
-            _focus={{ boxShadow: "none" }}
-            color="white"
-          />
-          <HStack
-            spacing={isSmallerThan768 ? 0 : 8}
-            alignItems="center"
-            flex="1"
-          >
-            <Box>
-              <Image
-                maxW={["100px", "200px"]}
-                minW={["50px", "70px"]}
-                width={["xs", "sm", "md", "lg"]}
-                src={logoImage}
-                alt="100acress logo"
-              />
-            </Box>
-
-            {!isSmallerThan768 && (
-              <>
-                <div
-                  className="relative group"
-                  onMouseEnter={handleHover}
-                  onMouseLeave={handleLeave}
-                >
-                  <Link
-                    to="/rent"
-                    className="text-white font-semibold text-lg px-1 py-2 rounded-md  "
-                  >
-                    Rent
-                  </Link>
-                  <div
-                    className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300  shadow-lg z-10 ${
-                      isMenuOpen ? "block" : "hidden"
-                    }`}
-                  >
-                    <div className="flex">
-                      <div className="w-48">
-                        <Link
-                          href="#"
-                          className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
-                        >
-                          Commercials
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Gurugaon
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Delhi
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Noida
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Dubai
-                        </Link>
-                      </div>
-
-                      <div className="w-48">
-                        <Link
-                          href="#"
-                          className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residentials
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Gurugaon
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Delhi
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Noida
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Dubai
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div
-                  className="relative group"
-                  onMouseEnter={handleHover1}
-                  onMouseLeave={handleLeave1}
-                >
-                  <Link
-                    to="/buy"
-                    className="text-white font-semibold text-lg px-1 py-2 rounded-md "
-                  >
-                    Buy
-                  </Link>
-                  <div
-                    className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${
-                      isMenuOpen1 ? "block" : "hidden"
-                    }`}
-                  >
-                    <div className="flex ">
-                      <div className="w-48">
-                        <Link
-                          href="#"
-                          className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
-                        >
-                          Commercials
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Gurugaon
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Delhi
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Noida
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Commercial Property Dubai
-                        </Link>
-                      </div>
-
-                      <div className="w-48">
-                        <Link
-                          href="#"
-                          className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residentials
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Gurugaon
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Delhi
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Noida
-                        </Link>
-                        <Link
-                          href="#"
-                          className="block text-sm px-4 py-2 hover:bg-gray-200"
-                        >
-                          Residential Property Dubai
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <Link
-                  to={"/SignIn"}
-                  className="text-white font-semibold text-lg"
-                >
-                  Sell
-                </Link>
-                <Link
-                  to={"/projects"}
-                  className="text-white font-semibold text-lg"
-                >
-                  Projects
-                </Link>
-
-              
-              </>
-            )}
-          </HStack>
-          <Flex alignItems="center">
-            <div className="" style={{ marginRight: "-69px" }}>
-              {token ? (
-                <Link to="/postproperty">
-                  <button className="btn flex btn-light text-black   btn-sm  sm:p-1 sm:text-sm ">
-                    <strong onClick={checkUserAuth} className="text-red-600">
-                      {" "}
-                      Post Property{" "}
-                    </strong>
-                    <Link className="d-none d-xl-inline d-md-inline">
-                      <button className="btn btn-danger p-0  ">Free</button>
-                    </Link>
-                  </button>
-                
-                </Link>
-              ) : (
-                <Link to="/SignIn">
-                  <button className="btn flex btn-light text-black   btn-sm  sm:p-1 sm:text-sm ">
-                    <strong onClick={checkUserAuth} className="text-red-600">
-                      {" "}
-                      Post Property{" "}
-                    </strong>
-                    <Link className="d-none d-xl-inline d-md-inline">
-                      <button className="btn btn-danger p-0 ">Free</button>
-                    </Link>
-                  </button>
-                </Link>
-              )}
-            </div>
-
-            <SpacerComponent />
-            <Menu>
-              <MenuButton
-                as={Button}
-                borderRadius="l"
-                variant="unstyled"
-                aria-label="Profile"
-                onMouseEnter={toggleDropdown}
-                
-              >
-                <Avatar
-                  name="User"
-                  boxSize="1.7em"
-                  bgColor="white"
-                  marginLeft={7}
-                  icon={
-                    <AvatarBadge
-                      boxSize={{ base: "0", md: "1em", sm: "0.8em" }}
-                      bg="green.500"
-                    />
-                  }
+        <Box bg="red" px={{ base: 0, md: 4, lg: 7 }}>
+          <Flex h={14} alignItems="center" justifyContent="space-between">
+            <IconButton
+              size={"md"}
+              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+              aria-label={"Open Menu"}
+              display={{ lg: "none" }}
+              onClick={isOpen ? onClose : onOpen}
+              variant="unstyled"
+              _hover={{ bg: "none" }}
+              _active={{ bg: "none" }}
+              _focus={{ boxShadow: "none" }}
+              color="white"
+            />
+            <HStack
+              spacing={isSmallerThan768 ? 0 : 8}
+              alignItems="center"
+              flex="1"
+            >
+              <Box>
+                <Image
+                  maxW={["100px", "200px"]}
+                  minW={["50px", "70px"]}
+                  width={["xs", "sm", "md", "lg"]}
+                  src={logoImage}
+                  alt="100acress logo"
                 />
-              </MenuButton>
-              <IconButton
-                icon={<ChevronDownIcon color="white" boxSize="2em" />}
-                variant="unstyled"
-                aria-label="Toggle Dropdown"
-                onMouseEnter={toggleDropdown}
-              />
+              </Box>
 
-              <MenuListContainer
-                isOpen={isDropdownOpen}
-                onClose={onClose}
-                onLoginRegisterClick={handleLoginRegisterClick}
-              />
-            </Menu>
+              {!isSmallerThan768 && (
+                <>
+                  <div
+                    className="relative group"
+                    onMouseEnter={handleHover}
+                    onMouseLeave={handleLeave}
+                  >
+                    <Link
+                      to="/rent"
+                      className="text-white font-semibold text-lg px-1 py-2 rounded-md  "
+                    >
+                      Rent
+                    </Link>
+                    <div
+                      className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300  shadow-lg z-10 ${isMenuOpen ? "block" : "hidden"
+                        }`}
+                    >
+                      <div className="flex">
+                        <div className="w-48">
+                          <Link
+                            href="#"
+                            className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
+                          >
+                            Commercials
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Gurugaon
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Delhi
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Noida
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Dubai
+                          </Link>
+                        </div>
+
+                        <div className="w-48">
+                          <Link
+                            href="#"
+                            className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residentials
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Gurugaon
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Delhi
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Noida
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Dubai
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    className="relative group"
+                    onMouseEnter={handleHover1}
+                    onMouseLeave={handleLeave1}
+                  >
+                    <Link
+                      to="/buy"
+                      className="text-white font-semibold text-lg px-1 py-2 rounded-md "
+                    >
+                      Buy
+                    </Link>
+                    <div
+                      className={`absolute mt-2 bg-white    text-gray-800 w-96 border border-gray-300 rounded-md shadow-lg z-10 ${isMenuOpen1 ? "block" : "hidden"
+                        }`}
+                    >
+                      <div className="flex ">
+                        <div className="w-48">
+                          <Link
+                            href="#"
+                            className="block px-4 py-2  text-black font-semibold text-lg hover:bg-gray-200"
+                          >
+                            Commercials
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Gurugaon
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Delhi
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Noida
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Commercial Property Dubai
+                          </Link>
+                        </div>
+
+                        <div className="w-48">
+                          <Link
+                            href="#"
+                            className="block text-black font-semibold text-lg px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residentials
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Gurugaon
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Delhi
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Noida
+                          </Link>
+                          <Link
+                            href="#"
+                            className="block text-sm px-4 py-2 hover:bg-gray-200"
+                          >
+                            Residential Property Dubai
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+    
+                  {token ?<Link
+                    to={"/postproperty"}
+                    className="text-white font-semibold text-lg"
+                  >
+                    <span   onClick={checkUserAuth}>Sell</span>
+                  </Link>:<Link
+                    to={"/SignIn"}
+                    className="text-white font-semibold text-lg"
+                  >
+                      <span   onClick={checkUserAuth} >Sell</span>
+                  </Link>}
+{/* 
+                  {token ? (<Link
+                    to={"/postproperty"}
+
+                    className="text-white font-semibold text-lg "
+                  >
+                    <p onClick={checkUserAuth} className="text-white font-semibold text-lg" >sell</p>
+                  </Link>) : (
+                    <Link
+                      to={"/SignIn"}
+
+                      className="text-white font-semibold text-lg"
+                    >
+                      <p onClick={checkUserAuth} className="text-white font-semibold text-lg" >sell</p>
+                    </Link>)} */}
+                  <Link
+                    to={"/projects"}
+                    className="text-white font-semibold text-lg"
+                  >
+                    Projects
+                  </Link>
+
+
+                </>
+              )}
+            </HStack>
+            <Flex alignItems="center">
+              <div className="" style={{ marginRight: "-69px" }}>
+                {token ? (
+                  <Link to="/postproperty">
+                    <button className="btn flex btn-light text-black   btn-sm  sm:p-1 sm:text-sm ">
+                      <strong onClick={checkUserAuth} className="text-red-600">
+                        {" "}
+                        Post Property{" "}
+                      </strong>
+                      <Link className="d-none d-xl-inline d-md-inline">
+                        <button className="btn btn-danger p-0  ">Free</button>
+                      </Link>
+                    </button>
+
+                  </Link>
+                ) : (
+                  <Link to="/SignIn">
+                    <button className="btn flex btn-light text-black   btn-sm  sm:p-1 sm:text-sm ">
+                      <strong onClick={checkUserAuth} className="text-red-600">
+                        {" "}
+                        Post Property{" "}
+                      </strong>
+                      <Link className="d-none d-xl-inline d-md-inline">
+                        <button className="btn btn-danger p-0 ">Free</button>
+                      </Link>
+                    </button>
+                  </Link>
+                )}
+              </div>
+
+              <SpacerComponent />
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  borderRadius="l"
+                  variant="unstyled"
+                  aria-label="Profile"
+                  onMouseEnter={toggleDropdown}
+
+                >
+                  <Avatar
+                    name="User"
+                    boxSize="1.7em"
+                    bgColor="white"
+                    marginLeft={7}
+                    icon={
+                      <AvatarBadge
+                        boxSize={{ base: "0", md: "1em", sm: "0.8em" }}
+                        bg="green.500"
+                      />
+                    }
+                  />
+                </MenuButton>
+                <IconButton
+                  icon={<ChevronDownIcon color="white" boxSize="2em" />}
+                  variant="unstyled"
+                  aria-label="Toggle Dropdown"
+                  onMouseEnter={toggleDropdown}
+                />
+
+                <MenuListContainer
+                  isOpen={isDropdownOpen}
+                  onClose={onClose}
+                  onLoginRegisterClick={handleLoginRegisterClick}
+                />
+              </Menu>
+            </Flex>
           </Flex>
-        </Flex>
 
-        {isOpen && (
-          <Box
-            pb={4}
-            display={{
-              base: "0em",
-              sm: "30em",
-              md: "48em",
-              lg: "62em",
-              xl: "80em",
-            }}
-          >
-            <Stack color="white" as="nav" spacing={4}>
-              {/* {Links.map((link) => (
+          {isOpen && (
+            <Box
+              pb={4}
+              display={{
+                base: "0em",
+                sm: "30em",
+                md: "48em",
+                lg: "62em",
+                xl: "80em",
+              }}
+            >
+              <Stack color="white" as="nav" spacing={4}>
+                {/* {Links.map((link) => (
                 <Link
                   key={link}
                   style={{ textDecoration: "none" }}
@@ -513,34 +531,45 @@ export default function Nav() {
                 </Link>
               ))} */}
 
-              <Link to={"/rent"} className="text-white font-semibold mx-3 text-lg">
-                Rent
-              </Link>
+                <Link to={"/rent"} className="text-white font-semibold mx-3 text-lg">
+                  Rent
+                </Link>
 
-              <Link to={"/buy"} className="text-white font-semibold text-lg mx-3">
-                Buy
-              </Link>
+                <Link to={"/buy"} className="text-white font-semibold text-lg mx-3">
+                  Buy
+                </Link>
 
-              <Link
-                to={"/SignIn"}
-                className="text-white font-semibold text-lg mx-3"
-              >
-                Sell
-              </Link>
 
-              <Link
-                to={"/projects"}
-                className="text-white font-semibold text-lg mx-3"
-              >
-                Projects
-              </Link>
+                {token ? (<Link
+                  to={"/postproperty"}
 
-            
-            </Stack>
-          </Box>
-        )}
+                  className="text-white font-semibold text-lg mx-3"
+                >
+                  <p onClick={checkUserAuth} >sell</p>
+                </Link>) : (
+                  <Link
+                    to={"/SignIn"}
+
+                    className="text-white font-semibold text-lg mx-3"
+                  >
+                    <p onClick={checkUserAuth} >sell</p>
+                  </Link>)}
+
+
+
+                <Link
+                  to={"/projects"}
+                  className="text-white font-semibold text-lg mx-3"
+                >
+                  Projects
+                </Link>
+
+
+              </Stack>
+            </Box>
+          )}
+        </Box>
       </Box>
-    </Box>
     </Wrapper>
   );
 }
