@@ -9,23 +9,21 @@ import axios from "axios";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-const customStyles = {
-  content: {
-    top: "35%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    width: "40%",
-    height: "47%",
-    transform: "translate(-40%, -10%)",
-    text: "white",
-  },
-};
+
 
 const BannerPage = () => {
   const sliderRef = React.createRef();
-  // const resetData = useRef(null);
+  const { pUrl } = useParams();
+  const [projectViewDetails, setProjectViewDetails] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    variableHeight: false,
+  };
 
   const resetData = () => {
     setUserDetails({
@@ -43,82 +41,11 @@ const BannerPage = () => {
     sliderRef.current.slickNext();
   };
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    variableHeight: false,
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserDetails({ ...userDetails, [name]: value });
-  };
-
-  const userSubmitDetails = (e) => {
-    e.preventDefault();
-    const { mobile } = userDetails;
-    if (mobile) {
-      axios
-        .post("https://acre.onrender.com/userInsert", userDetails)
-        .then((res) => {
-          alert("Data submitted");
-          resetData();
-        })
-
-        .catch((error) => {
-          alert(error.message);
-        });
-    } else {
-      alert("Please fill in the data");
-    }
-  };
-
-  const [userpopupdata, setUserPopupData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    address: "",
-    projectName: "",
-  });
-
-  const handlePopDataChange = (e) => {
-    const { name, value } = e.target;
-    setUserPopupData({ ...userpopupdata, [name]: value });
-  };
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleSubmitPopForm = (e) => {
-    e.preventDefault();
-    const { mobile, name, address, email, projectName } = userpopupdata;
-    if (mobile) {
-      axios
-        .post("https://acre.onrender.com/userInsert", userpopupdata)
-        .then((res) => alert("Data submitted"))
-        .catch((error) => alert(error.message));
-    } else {
-      alert("Please fill in the data");
-    }
-  };
-
-  const { pName } = useParams();
-  const [projectViewDetails, setProjectViewDetails] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await axios.get(
-          `https://acre.onrender.com/projectView/${pName}`
+          `https://acre.onrender.com/projectView/${pUrl}`
         );
         setProjectViewDetails(res.data.dataview[0]);
         console.log(res, "Response");
@@ -131,16 +58,79 @@ const BannerPage = () => {
 
   useEffect(() => {}, [projectViewDetails]);
 
+
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
     mobile: "",
-    address: "",
-    projectName: "",
+  
   });
 
-  const [showPopup, setShowPopup] = useState(false);
 
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserDetails({ ...userDetails, [name]: value });
+  };
+
+  const userSubmitDetails = (e) => {
+    e.preventDefault();
+    const { mobile } = userDetails;
+   
+    if (mobile) {
+      axios
+        .post("https://acre.onrender.com/userInsert", {
+          ...userDetails,
+          projectName: projectViewDetails.projectName,
+          address: projectViewDetails.projectAddress
+        })
+        .then((res) => {
+          alert("Data submitted");
+          resetData();
+        })
+
+        .catch((error) => {
+          alert(error.message);
+        });
+    } else {
+      alert("Please fill in the data");
+    }
+  };
+  const [popDetails, setPopDetails] = useState({
+    name: "",
+    email: "",
+    mobile: "",
+  });
+
+  const handlePopChange = (e) => {
+    const { name, value } = e.target;
+    setPopDetails({ ...popDetails, [name]: value });
+  };
+
+  const popSubmitDetails = (e) => {
+    e.preventDefault();
+    const { mobile } = popDetails;
+   
+    if (mobile) {
+      axios
+        .post("https://acre.onrender.com/userInsert", {
+          ...popDetails,
+          projectName: projectViewDetails.projectName,
+          address: projectViewDetails.projectAddress
+        })
+        .then((res) => {
+          alert("Data submitted");
+          resetData();
+        })
+
+        .catch((error) => {
+          alert(error.message);
+        });
+    } else {
+      alert("Please fill in the data");
+    }
+  };
   useEffect(() => {
     const timeOutId = setTimeout(() => {
       setShowPopup(true);
@@ -160,7 +150,7 @@ const BannerPage = () => {
   } = projectViewDetails;
 
   return (
-    <Wrapper className="section">
+    <Wrapper className="section" style={{overflowX:"hidden"}}>
       <>
         <header className="text-slate-700 container relative mx-auto flex flex-col overflow-hidden px-4 py-2 lg:flex-row lg:items-center">
           <div>
@@ -271,91 +261,81 @@ const BannerPage = () => {
                 <h4 className="mb-6 text-sm lg:text-3xl md:text-xl sm:text-sm font-extrabold text-[#ffc067]">
                   {projectViewDetails.projectName} Facing Apartment
                 </h4>
-                {/* <button
-                  type="button"
-                  className="rounded border-2 border-neutral-50 px-7 pb-[8px] pt-[10px] text-sm font-medium uppercase leading-normal text-neutral-50 transition duration-150 ease-in-out hover:border-neutral-100 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-neutral-100 focus:border-neutral-100 focus:text-neutral-100 focus:outline-none focus:ring-0 active:border-neutral-200 active:text-neutral-200 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
-                  data-te-ripple-init
-                  data-te-ripple-color="light"
-                  onClick={openModal}
-                >
-                  ENQUIRE NOW
-                </button> */}
-
-                <Modal
-                  isOpen={isModalOpen}
-                  onRequestClose={closeModal}
-                  contentLabel="Enquiry Modal"
-                  style={customStyles}
-                >
-                  {/* Button to close the modal */}
-                  <button onClick={closeModal}>Close Modal</button>
-                  {/* Modal content */}
-                </Modal>
               </div>
             </div>
           </div>
         </div>
-            
 
-               {/* //PopUp Form */}
+        {/* //PopUp Form */}
 
-        <div className='relative   '>
-         {showPopup && (
         <div className="relative  ">
-          {/* Popup */}
           {showPopup && (
-            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center" >
-              <div className="absolute top-0 left-0 w-full h-full bg-yellow-500 bg-opacity-50" />
-              <div className="relative">
-                <button
-                  className="absolute top-0 right-0  text-blue-600 rounded-lg"
-                  onClick={() => setShowPopup(false)}
-                >
-                  <i className="fa-solid fa-xmark text-4xl"></i>
-                </button>
-                <form className=" rounded-lg px-6 py-3 w-96 shadow-md bg-yellow-500" >
-                  <div className="mb-2">
-                    <h2 class="text-xl font-semibold text-blue-600">
-                      GET A CALLBACK
-                    </h2>
-                    <input
-                      className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="name"
-                      type="text"
-                      placeholder="Enter your name"
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <input
-                      class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                    />
-                  </div>
-                  <div className="mb-2">
-                    <textarea
-                      class="appearance-none border  rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="message"
-                      rows="2"
-                      placeholder="Enter your message"
-                    ></textarea>
-                  </div>
-                  <div class="flex justify-center">
+            <div className="relative">
+              {/* Popup */}
+              {showPopup && (
+                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center  ">
+                  <div className="absolute top-0 left-0 w-full h-full  bg-opacity-50 p-5 xs:overflow-hidden" />
+                  <div className="relative  ">
                     <button
-                      class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-[150px] rounded focus:outline-none focus:shadow-outline"
-                      type="button"
+                      className="absolute top-0 right-0  text-black rounded-lg"
+                      onClick={() => setShowPopup(false)}
                     >
-                      Send
+                      <i className="fa-solid fa-xmark text-4xl"></i>
                     </button>
+                    <form className=" rounded-lg px-6 py-3 w-96 shadow-md bg-white xs:px-3 ">
+                      <div className="mb-2">
+                        <h2 class="text-xl font-semibold text-black ">
+                          GET A CALLBACK
+                        </h2>
+                        <input
+                          className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                         
+                          type="text"
+                          placeholder="Enter your name"
+                          name="name"
+                          onChange={handlePopChange}
+                          value={popDetails.name}
+                        />
+                      </div>
+                      <div className="mb-2">
+                        <input
+                          class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                         
+                          type="email"
+                          placeholder="Enter your email"
+                          name="email"
+                          onChange={handlePopChange}
+                          value={popDetails.email}
+                        />
+                      </div>
+                      <div className="mb-2">
+                        <textarea
+                          class="appearance-none border  rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                         
+                          rows="2"
+                          placeholder="Enter your mobile"
+                          name="mobile"
+                          onChange={handlePopChange}
+                          value={popDetails.mobile}
+                        ></textarea>
+                      </div>
+                      <div class="flex justify-center">
+                        <button
+                          class="bg-black  text-white font-bold py-2 px-[150px] rounded focus:outline-none focus:shadow-outline"
+                          type="button"
+                          onClick={popSubmitDetails}
+                        >
+                          Send
+                        </button>
+                      </div>
+                    </form>
                   </div>
-                </form>
-              </div>
+                </div>
+              )}
             </div>
           )}
         </div>
-      )}
-    </div>
+
         <div
           className="lg:flex sm:text-center lg:mx-20 lg:flex-col lg:items-center"
           style={{ marginLeft: "38px", paddingTop: "28px" }}
@@ -373,8 +353,7 @@ const BannerPage = () => {
             {projectViewDetails.projectName}
           </span>
         </div>
-        
-     
+
         <div className=" lg:text-justify md:text-center  text-gray-700 m-4 md:m-8 lg:m-12 xl:m-20 text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl pt-0 mt-4">
           <span className="leading-relaxed">
             {projectViewDetails.project_discripation}
@@ -385,7 +364,7 @@ const BannerPage = () => {
           <img
             src={projectViewDetails?.project_locationImage?.url}
             alt="location image"
-            className="w-full h-auto"
+            className="w-screen h-screen"
           />
         </div>
 
@@ -501,9 +480,6 @@ const BannerPage = () => {
             URBAN LIVING REDEFINING CITY LIFE
           </span>
         </div>
-
-
-       
 
         <div className="relative mb-2 max-w-screen-lg mx-auto lg:mx-4 xl:mx-8 sm:w-full lg:pt-1 sm:pt-0 overflow-hidden">
           <Slider ref={sliderRef} {...settings} className="overflow-hidden">
@@ -697,97 +673,6 @@ const BannerPage = () => {
           </div>
         </div>
 
-        {/* <div className="sm:h-auto lg:h-[600] w-auto bg-[#012e29]">
-        <div className="text-center text-white m-4 md:m-8 lg:m-12 xl:m-20 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl lg:pt-4 mt-4">
-          <p className="leading-relaxed">
-            EXPERIENCE LUXURY LIVING WITH UNPARALLELED AMENITIES AND INDULGENCES
-          </p>
-        </div>
-
-        <div className="text-justify text-white m-4 md:m-8 lg:m-12 xl:m-20 text-sm sm:text-base md:text-lg lg:text-xl  pt-0 mt-4">
-          <p className="leading-relaxed">
-            Experience unparalleled convenience and access to the city's premier
-            attractions, coupled with a serene oasis in the midst of the vibrant
-            metropolis. Indulge in the best of everything at Golf Island, where
-            prime location and luxurious amenities combine to create the ideal
-            address for discerning individuals and families.
-          </p>
-        </div>
-
-        <form className="mx-auto max-w-2xl h-auto" ref={resetData}>
-          <div className="lg:pt-6 mb-4 border-b border-white">
-            <input
-              row="6"
-              type="text"
-              name="name"
-              onChange={handleChange}
-              value={userDetails.name}
-              placeholder="Enter Your Name*"
-              className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-            ></input>
-          </div>
-
-          <div className="mb-4 relative border-b border-white">
-            <input
-              type="text"
-              name="email"
-              row="6"
-              value={userDetails.email}
-              onChange={handleChange}
-              placeholder="Enter Your Email*"
-              className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-            />
-          </div>
-
-          <div className="mb-4  border-b border-white">
-            <input
-              type="text"
-              name="mobile"
-              value={userDetails.mobile}
-              onChange={handleChange}
-              required
-              placeholder="Contact Number*"
-              className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <input
-              placeholder="Project Name*"
-              name="projectName"
-              value={projectViewDetails.projectName}
-              onChange={handleChange}
-              type="hidden"
-              className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <input
-              placeholder="Project Address*"
-              name="address"
-              onChange={handleChange}
-              value={projectViewDetails.projectAddress}
-              type="hidden"
-              className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
-            />
-          </div>
-
-          <div className="flex justify-center md:mt-2 p-4">
-            <strong className="text-white text-center">
-              Rera No. {projectViewDetails.projectReraNo}
-            </strong>
-          </div>
-          <div className="flex justify-center ">
-            <button
-              onClick={userSubmitDetails}
-              className="inline-flex gap-1  text-white bg-[#012e29] border focus:outline-none px-3 py-2 rounded"
-            >
-              Make an Inquiry <i className="fa-solid fa-arrow-right pt-1 "></i>
-            </button>
-          </div>
-        </form>
-      </div> */}
 
         <div className="sm:h-auto lg:h-[600px] xl:h-[540px] w-full sm:w-auto bg-[#012e29]">
           <div className="text-center text-white m-4 md:m-8 lg:m-12 xl:m-20 text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl lg:pt-4 mt-4">
@@ -807,17 +692,18 @@ const BannerPage = () => {
             </p>
           </div>
 
+
           <form className="mx-auto max-w-2xl h-auto">
             <div className="lg:pt-6 mb-4 border-b border-white">
               <input
-                rows="6"
+                row="6"
                 type="text"
                 name="name"
                 onChange={handleChange}
                 value={userDetails.name}
                 placeholder="Enter Your Name*"
-                className="appearance-none text-white bg-transparent border-none sm:w-auto  md:w-auto md:max-w-md  mr-3 py-1 px-2 leading-tight focus:outline-none"
-              />
+                className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
+              ></input>
             </div>
 
             <div className="mb-4 relative border-b border-white">
@@ -828,11 +714,11 @@ const BannerPage = () => {
                 value={userDetails.email}
                 onChange={handleChange}
                 placeholder="Enter Your Email*"
-                className="appearance-none bg-transparent text-white border-none sm:w-auto  md:w-auto md:max-w-md  mr-3 py-1 px-2 leading-tight focus:outline-none"
+                className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
               />
             </div>
 
-            <div className="mb-4 border-b border-white">
+            <div className="mb-4  border-b border-white">
               <input
                 type="text"
                 name="mobile"
@@ -840,18 +726,18 @@ const BannerPage = () => {
                 onChange={handleChange}
                 required
                 placeholder="Contact Number*"
-                className="appearance-none bg-transparent text-white border-none sm:w-auto  md:w-auto md:max-w-md  mr-3 py-1 px-2 leading-tight focus:outline-none"
+                className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
               />
             </div>
 
-            <div>
+            {/* <div>
               <input
                 placeholder="Project Name*"
                 name="projectName"
                 value={projectViewDetails.projectName}
                 onChange={handleChange}
                 type="hidden"
-                className="appearance-none bg-transparent text-white border-none sm:w-auto  md:w-auto md:max-w-md  mr-3 py-1 px-2 leading-tight focus:outline-none"
+                className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
               />
             </div>
 
@@ -861,23 +747,24 @@ const BannerPage = () => {
                 name="address"
                 onChange={handleChange}
                 value={projectViewDetails.projectAddress}
+               
                 type="hidden"
-                className="appearance-none bg-transparent text-white border-none sm:w-auto  md:w-auto md:max-w-md  mr-3 py-1 px-2 leading-tight focus:outline-none"
+                className="appearance-none bg-transparent border-none w-full text-white mr-3 py-1 px-2 leading-tight focus:outline-none"
               />
-            </div>
+            </div> */}
 
             <div className="flex justify-center md:mt-2 p-4">
               <strong className="text-white text-center">
                 Rera No. {projectViewDetails.projectReraNo}
               </strong>
             </div>
-
-            <div className="flex justify-center">
+            <div className="flex justify-center ">
               <button
                 onClick={userSubmitDetails}
-                className="inline-flex gap-1 text-white bg-[#012e29] border focus:outline-none px-3 py-2 rounded"
+                className="inline-flex gap-1  text-white bg-[#012e29] border focus:outline-none px-3 py-2 rounded"
               >
-                Make an Inquiry <i className="fa-solid fa-arrow-right pt-1"></i>
+                Make an Inquiry{" "}
+                <i className="fa-solid fa-arrow-right pt-1 "></i>
               </button>
             </div>
           </form>

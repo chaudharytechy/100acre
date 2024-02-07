@@ -209,9 +209,9 @@ function Home() {
           <section className="flex flex-col bg-white ">
             <div className="grid max-w-md grid-cols-1 p-4  sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
               {trendingProject.map((item, index) => {
-                const pName = item.projectName;
+                const pUrl = item.project_url;
                 return (
-                  <Link to={`/${pName}`} target="_blank">
+                  <Link to={`/${pUrl}`} target="_blank">
                     <article
                       key={index}
                       className="mb-4  overflow-hidden rounded-xl  border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl"
@@ -290,9 +290,9 @@ function Home() {
         <section className="flex flex-col  bg-white">
           <div className="grid max-w-md grid-cols-1 p-4  sm:max-w-lg  md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 sm:gap-2 lg:gap-4">
             {featuredProject.map((item, index) => {
-              const pName = item.projectName;
+              const pUrl = item.project_url;
               return (
-                <Link to={`/${pName}`} target="_blank">
+                <Link to={`/${pUrl}`} target="_blank">
                   <article
                     key={index}
                     className="mb-4 overflow-hidden rounded-xl border text-gray-700 shadow-md duration-500 ease-in-out hover:shadow-xl"
@@ -467,6 +467,34 @@ const Wrapper = styled.section`
     }
     .djqwUUJNCO {
       height: 17vh !important;
+      background-image: url("../../Images/1.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  @media screen and (max-width: 425px) and (min-width: 425px) {
+    .xjUWI {
+      font-size: x-large;
+      margin: 10px 30px !important;
+    }
+    .djqwUUJNCO {
+      height: 60vh !important;
+      background-image: url("../../Images/1.png");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+
+  @media screen and (max-width: 375px) and (min-width: 375px) {
+    .xjUWI {
+      font-size: x-large;
+      margin: 10px 30px !important;
+    }
+    .djqwUUJNCO {
+      height: 20vh !important;
       background-image: url("../../Images/1.png");
       background-repeat: no-repeat;
       background-size: cover;

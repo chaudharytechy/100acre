@@ -31,7 +31,7 @@ function Properties() {
       <section className="flex flex-col items-center bg-white">
         <div className="mt-10 grid max-w-md grid-cols-1 gap-6 px-2 sm:max-w-lg sm:px-20 md:max-w-screen-xl md:grid-cols-2 md:px-10 lg:grid-cols-4 lg:gap-8">
           {rentData.map((item, index) => {
-            const pName = item.projectName;
+            const pUrl = item.project_url;
             return (
               <article
                 key={index}
@@ -72,7 +72,7 @@ function Properties() {
                     </li>
 
                     <li className="text-left">
-                      <Link to={`/${pName}`} target="_blank">
+                      <Link to={`/${pUrl}`} target="_blank">
                         <button
                           type="button"
                           className="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-2 py-2  text-center me-2"
