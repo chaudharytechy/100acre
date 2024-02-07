@@ -267,13 +267,12 @@ const BannerPage = () => {
         </div>
 
         {/* //PopUp Form */}
-
         <div className="relative  ">
           {showPopup && (
             <div className="relative">
               {/* Popup */}
               {showPopup && (
-                <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center  ">
+                <div className="fixed top-50 left-0 w-full h-full flex items-center justify-center transform -translate-y-1/2  ">
                   <div className="absolute top-0 left-0 w-full h-full  bg-opacity-50 p-5 xs:overflow-hidden" />
                   <div className="relative  ">
                     <button
@@ -309,7 +308,7 @@ const BannerPage = () => {
                         />
                       </div>
                       <div className="mb-2">
-                        <textarea
+                        <input
                           class="appearance-none border  rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                          
                           rows="2"
@@ -317,7 +316,7 @@ const BannerPage = () => {
                           name="mobile"
                           onChange={handlePopChange}
                           value={popDetails.mobile}
-                        ></textarea>
+                        ></input>
                       </div>
                       <div class="flex justify-center">
                         <button

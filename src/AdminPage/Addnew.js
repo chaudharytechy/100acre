@@ -20,6 +20,7 @@ const AddNew = () => {
     type: "",
     city: "",
     projectOverview: "",
+    project_url:""
   });
 
   const resetData = () => {
@@ -42,6 +43,7 @@ const AddNew = () => {
       type: "",
       city: "",
       projectOverview: "",
+      project_url:""
     });
   };
 
@@ -189,6 +191,7 @@ const AddNew = () => {
             <option value="">Select Project Overview</option>
             <option value="trending">Trending</option>
             <option value="featured">Featured</option>
+            <option value="none">None</option>
           </select>
 
           <label className="block" for="name">
@@ -351,6 +354,17 @@ const AddNew = () => {
               placeholder="City"
               name="city"
               value={editFromData.city}
+              onChange={handleChangeProjectData}
+            />
+          </label>
+
+          <label className="block" for="name">
+            <input
+              className="w-full  rounded-md border bg-white px-2 py-1 outline-none ring-black focus:ring-1"
+              type="text"
+              placeholder="Project URL"
+              name="project_url"
+              value={editFromData.project_url}
               onChange={handleChangeProjectData}
             />
           </label>

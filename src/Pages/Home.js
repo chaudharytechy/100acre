@@ -193,7 +193,7 @@ function Home() {
           Trending Properties
         </div> */}
         <div
-          className="xjUW "
+          className="xjUWI "
           style={{
             fontSize: "xx-large",
             margin: "20px 40px 5px",
@@ -275,7 +275,7 @@ function Home() {
       <SpacesAvailable />
 
       <div
-        className="xjUW "
+        className="xjUWI "
         style={{
           fontSize: "xx-large",
           margin: "20px 60px",
