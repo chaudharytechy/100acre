@@ -12,13 +12,12 @@ const buyCommercial_Schema = new mongoose.Schema({
         }
     },
     otherImage: [
-       
     ],
-    projectName: {
+    propertyName: {
         type: String,
         required: true
     },
-    propertyTitle: {
+    propertyType: {
         type: String,//here we mention 1bhk or 
         required: true
     },
@@ -56,8 +55,25 @@ const buyCommercial_Schema = new mongoose.Schema({
         type:String,
         required:true
     },
-
-
+    furnishing:{
+        type:String,
+        required:true
+    },
+    landMark:{
+        type:String,
+        required:true
+    },
+    builtYear:{
+        type:String,
+        required:true
+    },
+    availableDate:{
+        type:String
+    },
+    schema_type:{
+        type: String,
+        default:"buy"
+      },
 })
 const buyCommercial_Model = mongoose.model('BuyCommercial_Property', buyCommercial_Schema)
 module.exports = buyCommercial_Model

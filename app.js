@@ -12,12 +12,17 @@ const fileUpload=require('express-fileupload')
 var cloudinary=require('cloudinary').v2;
 
 
+// app.use(compression())
+
 // set template
 // app.set('view engine', 'ejs')
 // app.use(express.static('public'))
 
 // cors
 app.use(cors())
+
+// for storing data into cache and if want to clear cache autometic pass under this SSTDL=time
+// const NodeCache=new NodeCache()  
 
 // cloudinary config
 cloudinary.config({
@@ -52,6 +57,7 @@ app.use(cookieParser())
 
 // Router Link
 app.use('/',router)
+
 
 app.listen(Port,()=>{
     console.log(`App Listen On the ${Port}`)

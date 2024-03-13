@@ -1,114 +1,151 @@
 const mongoose = require('mongoose')
+
+const bhk_Schema = new mongoose.Schema({
+    bhk_type: {
+        type: String //1/2/3bhk
+    },
+    price: {
+        type: String
+    },
+    bhk_Area: {
+        type: String
+    }
+
+})
+const highlight_Schema = new mongoose.Schema({
+    highlight_Point: {
+        type: String
+    }
+})
+
 const projectSchema = new mongoose.Schema({
-    sliderImage: {
+
+    project_floorplan_Image: [],
+    frontImage: {
         public_id: {
             type: String,
-            required: true
         },
         url: {
             type: String,
-            required: true
-        }
+        },
     },
-    sitePlan: {
+    logo: {
         public_id: {
             type: String,
-            required: true
         },
         url: {
             type: String,
-            required: true
-        }
+        },
     },
-    Image2: {
+    project_locationImage: {
         public_id: {
             type: String,
-            required: true
         },
         url: {
             type: String,
-            required: true
-        }
+        },
+    },
+    state: {
+        type: String
     },
     projectName: {
         type: String,
-        required: true
-    },
-    minPrice: {
-        type: String,
-        required: true
-    },
-    maxPrice: {
-        type: String,
-        required: true
-    },
-    developerName: {
-        type: String,
-        required: true
-    },
-    bedroom: [{
-        type: String,
-        required: true
-    }],
-    address: {
-        type: String,
-        required: true
-    },
-    state:
-        {
-            type: String,
-            required: true
-        },
-    
-    block: {
-        type: String,
-        required: true
-    },
-    floor: {
-        type: String,
-        required: true
-    },
-    carparkSpace: {
-        type: String,
-        required: true
-    },
-    nearestLandmark:{
-        type:String,
-        required:true
-    },
-    propertyType: {
-        type: String,
-        required: true
-    },
-    aboutProject: {
-        type: String,
-        required: true
-    },
-    facility: [
-        {
-            type: String,
-            required: true
-        }
-    ],
-    unit:{
-        type:String,
-        required:true
-    },
-    launch:{
-        type:String,
-        required:true
-    },
-    area:{
-        type:String,
-        required:true
-    }
 
+    },
+    projectAddress: {
+        type: String,
+    },
+    project_discripation: {
+        type: String,
+    },
+    projectRedefine_Connectivity: [{
+        type: String,
+
+    }],
+    projectRedefine_Entertainment: [{
+        type: String,
+
+    }],
+    projectRedefine_Business: [{
+        type: String,
+
+    }],
+    projectRedefine_Education: [{
+        type: String,
+
+    }],
+
+    meta_description: {
+        type: String
+    },
+    meta_title: {
+        type: String
+    },
+
+    Amenities: [{ type: String }],
+    projectBgContent: {
+        type: String
+    },
+    projectReraNo: {
+        type: String
+    },
+    type: {
+        type: String
+    },
+    city: {
+        type: String
+    },
+    builderName: {
+        type: String
+    },
+    AboutDeveloper: {
+        type: String
+    },
+    projectOverview: {
+        type: String
+    },
+    schema_type: {
+        type: String,
+        default: "project"
+    },
+    project_Brochure: {
+        public_id: {
+            type: String,
+        },
+        url: {
+            type: String,
+        },
+    },
+    project_Status: {
+        type: String
+    },
+    project_url: {
+        type: String
+    },
+    projectGallery:[],
+    highlightImage: {
+        public_id: {
+            type: String,
+        },
+        url: {
+            type: String,
+        },
+    },
+    projectMaster_Image:{
+        public_id: {
+            type: String,
+        },
+        url: {
+            type: String,
+        },
+    },
+    BhK_Details: [bhk_Schema],
+    highlight: [highlight_Schema],
 },
 
     {
         timestamps: true
     }
-
 )
 
 const ProjectModel = mongoose.model("projectData", projectSchema)

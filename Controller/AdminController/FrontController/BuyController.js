@@ -1,33 +1,48 @@
+const postPropertyModel = require('../../../models/postProperty/post');
 const buyCommercial_Model = require('../../../models/property/buyCommercial');
 const cloudinary = require('cloudinary').v2;
+const NodeCache = require("node-cache");
 
+const cache = new NodeCache();
 class BuyController {
     // Buy Commercial Insert Edit View Update Delete
     static buycommercialInsert = async (req, res) => {
         try {
-            const { projectName, propertyTitle, price, state, city, address, type, descripation, amenities, area } = req.body
-            if (projectName && propertyTitle && price && state && city && address && type && descripation && amenities && area && req.files) {
+            const { propertyName, propertyType, availableDate, price, state, city, address, type, descripation, amenities, area, furnishing
+                , landMark, builtYear } = req.body
+            console.log(req.body)
+            if (propertyName && propertyType && availableDate && price && state && city && address && type && descripation && amenities && area && furnishing && landMark && builtYear) {
+                // console.log("kgha")
                 if (req.files.frontImage && req.files.otherImage) {
                     const front = req.files.frontImage;
                     const other = req.files.otherImage
 
-                // const length=other.length;
-                // console.log(length)
-
+                    // const length=other.length;
                     const otherImageLink = []
                     // console.log(otherImageLink)
                     const imageResult = await cloudinary.uploader.upload(
                         front.tempFilePath, {
-                        folder: "100acre/BuyCommercial"
+                        folder: `100acre/BuyCommercial/${propertyName}`
                     }
 
                     )
                     // console.log(imageResult)
-                    if(other.length >= 2){
-                    for (let i=0; i<other.length; i++) {
+                    if (other.length >= 2) {
+                        for (let i = 0; i < other.length; i++) {
+                            const otherResult = await cloudinary.uploader.upload(
+                                other[i].tempFilePath, {
+                                folder: `100acre/BuyCommercial/${propertyName}`
+                            }
+                            );
+                            otherImageLink.push({
+                                public_id: otherResult.public_id,
+                                url: otherResult.secure_url
+                            })
+                        }
+                    } else {
                         const otherResult = await cloudinary.uploader.upload(
-                            other[i].tempFilePath, {
-                            folder: "100acre/BuyCommercial"
+                            other.tempFilePath, {
+                            folder: `100acre/BuyCommercial/${propertyName}`
                         }
                         );
                         otherImageLink.push({
@@ -35,25 +50,15 @@ class BuyController {
                             url: otherResult.secure_url
                         })
                     }
-                }else{
-                    const otherResult = await cloudinary.uploader.upload(
-                        other.tempFilePath, {
-                        folder: "100acre/BuyCommercial"
-                    }
-                    );
-                    otherImageLink.push({
-                        public_id: otherResult.public_id,
-                        url: otherResult.secure_url
-                    })
-                }
                     const data = new buyCommercial_Model({
                         frontImage: {
                             public_id: imageResult.public_id,
                             url: imageResult.secure_url
                         },
                         otherImage: otherImageLink,
-                        projectName: projectName,
-                        propertyTitle: propertyTitle,
+                        propertyName: propertyName,
+                        propertyType: propertyType,
+                        availabledate: availableDate,
                         price: price,
                         state: state,
                         city: city,
@@ -61,13 +66,16 @@ class BuyController {
                         descripation: descripation,
                         amenities: amenities,
                         type: type,
-                        area: area
+                        area: area,
+                        furnishing: furnishing,
+                        landMark: landMark,
+                        builtYear: builtYear
 
                     })
-                    // console.log(data)
+                    // cconsole.log(data)
                     await data.save()
                     res.status(201).json({
-                        message: "done",
+                        message: "data inserted successfully !",
                         dataget: data
                     })
                 } else {
@@ -77,84 +85,172 @@ class BuyController {
                 }
             } else {
                 res.status(403).json({
-                    message: " not  done",
+                    message: "check your field ! ",
                 })
             }
         } catch (error) {
             console.log(error)
             res.status(500).json({
-                error: "error occured !"
+                error: "internal server error  !"
             })
         }
 
     }
 
-    static viewAll=async(req,res)=>{
+    static viewAll = async (req, res) => {
         try {
-            console.log("hello")
-            const data=await buyCommercial_Model.find()
+
+
+            const data = await buyCommercial_Model.find()
+
+            const data1 = await postPropertyModel.aggregate([
+                {
+                    $match: {
+                        "postProperty.verify": "verified",
+                        "postProperty.propertyLooking": "Sell"
+                    }
+                },
+                {
+                    $project: {
+                        name: 1,
+                        postProperty: {
+                            $filter: {
+                                input: "$postProperty",
+                                as: "property",
+                                cond: {
+                                    $and: [
+                                        { $eq: ["$$property.propertyLooking", "Sell"] },
+                                        { $eq: ["$$property.verify", "verified"] }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            ]);
             res.status(200).json({
-                message:"All data get successfully ! ",
+                data1,
+                message: 'Data fetched from the database!',
                 data
-            })
+
+            });
         } catch (error) {
             console.log(error)
             res.status(500).json({
-                message:'internal server error'
+                message: 'internal server error'
             })
         }
     }
-    
-    static buycommercialView = async (req, res) => {
+    // view by id 
+    static buyView_id = async (req, res) => {
         try {
-            const type= req.params.type
-            const data = await buyCommercial_Model.find({ type:type })
+            const id = req.params.id;
+            if (id) {
+                const data = await buyCommercial_Model.findById({ _id: id })
+                //     const postData= await postPropertyModel.findOne({ "postProperty._id":id },
+                //     {
+                //         postProperty: {
+                //             $elemMatch: {
+                //                 _id: id,
+                //             },
+                //         },
+                //     }
+                // )
+                // const postData=await postPropertyModel.aggregate(
+                // {
+                //     $match:{
+                //         "postProperty._id":id 
+                //     }
+                // },
+                // {
+                //     project:{
+                //         _id:1,
 
-            res.status(201).json({
-                message: "view enable",
-                dataview: data
-            })
+                //         postProperty:{
+                //             $filter:{
+                //                 input:"postProperty",
+                //                 as:"property",
+                //                 cond:{
+                //                     $eq:["$$property._id","id"]
+                //                 }
+                //             }
+                //         }
+                //     },
+                // }
+
+                // )
+                const users = await postPropertyModel.aggregate([
+                    {
+                      $unwind: '$postProperty'
+                    },
+                    {
+                      $match: {
+                        "postProperty._id":ObjectId(id)
+                      }
+                    }
+                  ]);
+              
+                res.json(users);
+                // if (data) {
+                //     res.status(200).json({
+                //         message: "data get successfully ! ",
+                //         postData
+                //     })
+                // } else {
+                //     res.status(201).json({
+                //         message: "data not found  ! ",
+                //         postProperty
+                //     })
+                // }
+            } else {
+                res.status(404).json({
+                    message: "id does not found in url !"
+                })
+            }
 
         } catch (error) {
             console.log(error)
             res.status(500).json({
-                error: "an error is occured",
+                message: "internal server error ! "
             })
         }
     }
-    static view = async (req, res) => {
-        try {
+
     //    res.send('search with name and type')
-         const projectName=req.params.projectName;
-         const type=req.params.type;
-        const query = { projectName:projectName,type:type };
-         const data=await buyCommercial_Model.find(query)
-         res.status(200).json({
-            message:"data get succesfull",
-            datar:data
-        })
+    // static view_Name_type = async (req, res) => {
+    //     try {
 
-        } catch (error) {
-            console.log(error)
-            res.status(500).json({
-                message: "something went wrong ! ",
-            })
-        }
-    }
+    //         const propertyName = req.params.propertyName;
+    //         const type = req.params.type;
+    //         const query = { propertyName: propertyName, type: type };
+    //         const data = await buyCommercial_Model.find(query)
+    //         res.status(200).json({
+    //             message: "data get succesfull",
+    //             data: data
+    //         })
+
+    //     } catch (error) {
+    //         console.log(error)
+    //         res.status(500).json({
+    //             message: "something went wrong ! ",
+    //         })
+    //     }
+    // }
+
 
     static buycommercialEdit = async (req, res) => {
         try {
             const id = req.params.id
-            const data = await buyCommercial_Model.findById(id)
+            const data = await buyCommercial_Model.findById({ _id: id })
             res.status(200).json({
-                message: "data get successfully !",
+                message: "data get successfully !!",
                 dataedit: data
             })
 
         } catch (error) {
             console.log(error);
             res.status(500).json({
-                message:"something went wrong ! "
+                message: "something went wrong ! "
             })
         }
     }
@@ -162,167 +258,60 @@ class BuyController {
     static buycommercialUpdate = async (req, res) => {
         // res.send("listen update")
         try {
-            const { projectName, propertyTitle, city, state, address, price, type, descripation, amenities ,area } = req.body
-            if (projectName && propertyTitle && city && state && address && price && type && descripation && amenities && area) {
-                if (req.files) {
+            const { propertyName, propertytype, availabledate, city, state, address, price, type, descripation, amenities, area, furnishing, landMark, builtYear } = req.body
 
-                    if (req.files.frontImage && req.files.otherImage) {
-                        const front = req.files.frontImage;
-                        const other = req.files.otherImage;
-                        const otherImageLink = [];
+            if (req.files) {
 
-                        const data = await buyCommercial_Model.findById(req.params.id)
-                        const frontId = data.frontImage.public_id;
-                        await cloudinary.uploader.destroy(frontId)
+                if (req.files.frontImage && req.files.otherImage) {
+                    const front = req.files.frontImage;
+                    const other = req.files.otherImage;
+                    const otherImageLink = [];
 
-                        const frontResult = await cloudinary.uploader.upload(front.tempFilePath, {
-                            folder: "100acre/BuyCommercial"
-                        })
+                    const data = await buyCommercial_Model.findById(req.params.id)
+                    const frontId = data.frontImage.public_id;
+                    await cloudinary.uploader.destroy(frontId)
+
+                    const frontResult = await cloudinary.uploader.upload(front.tempFilePath, {
+                        folder: `100acre/BuyCommercial/${propertyName}`
+                    })
 
 
-                        if (other.length >= 2) {
-                            for (let i = 0; i < other.length; i++) {
-                                const otherResult = await cloudinary.uploader.upload(other[i].tempFilePath, {
-                                    folder: "100acre/BuyCommercial"
-                                });
-                                otherImageLink.push({
-                                    public_id: otherResult.public_id,
-                                    url: otherResult.secure_url
-                                })
-                            }
-                        } else {
-                            const imageResult = await cloudinary.uploader.upload(other.tempFilePath, {
-                                folder: "100acre/BuyCommercial"
+                    if (other.length >= 2) {
+                        for (let i = 0; i < other.length; i++) {
+                            const otherResult = await cloudinary.uploader.upload(other[i].tempFilePath, {
+                                folder: `100acre/BuyCommercial/${propertyName}`
                             });
-
                             otherImageLink.push({
-                                public_id: imageResult.public_id,
-                                url: imageResult.secure_url
-                            });
-                        }
-                        const result = await buyCommercial_Model.findById(req.params.id)
-                        for (let i = 0; i < result.otherImage.length; i++) {
-                            otherImageLink.push(
-                                result.otherImage[i]
-                            );
-                        }
-
-                        const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
-                            frontImage: {
-                                public_id: frontResult.public_id,
-                                url: frontResult.secure_url
-                            },
-                            otherImage: otherImageLink,
-                            projectName: projectName,
-                            propertyTitle: propertyTitle,
-                            price: price,
-                            state: state,
-                            city: city,
-                            address: address,
-                            descripation: descripation,
-                            amenities: amenities,
-                            type: type,
-                            area:area
-                        })
-                        // console.log(dataUpdate)
-                        await dataUpdate.save()
-                        res.status(200).json({
-                            message: "successfully updated !",
-                            data: dataUpdate
-                        })
-                    } else if (req.files.frontImage) {
-                        const front = req.files.frontImage;
-                        const data = await buyCommercial_Model.findById(req.params.id)
-                        const imageId = data.frontImage.public_id;
-                        await cloudinary.uploader.destroy(imageId)
-
-                        const imageResult = await cloudinary.uploader.upload(front.tempFilePath, {
-                            folder: "100acre/BuyCommercial"
-                        })
-
-                        const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
-                            frontImage: {
-                                public_id: imageResult.public_id,
-                                url: imageResult.secure_url
-                            },
-                            projectName: projectName,
-                            propertyTitle: propertyTitle,
-                            price: price,
-                            state: state,
-                            city: city,
-                            address: address,
-                            descripation: descripation,
-                            amenities: amenities,
-                            type: type,
-                            area:area
-
-                        })
-                        // console.log(dataUpdate)
-                        await dataUpdate.save()
-                        res.status(200).json({
-                            message: "successfully updated !",
-                            data: dataUpdate
-                        })
-
-                    }
-                    else if (req.files.otherImage) {
-                        const other = req.files.otherImage;
-                        const otherImageLink = []
-
-                        if (other.length >= 2) {
-                            for (let i = 0; i < other.length; i++) {
-                                const otherimage = await cloudinary.uploader.upload(other[i].tempFilePath, {
-                                    folder: "100acre/BuyCommercial"
-                                })
-                                otherImageLink.push({
-                                    public_id: otherimage.public_id,
-                                    url: otherimage.secure_url
-                                })
-                            }
-                        } else {
-                            const imageResult = await cloudinary.uploader.upload(other.tempFilePath, {
-                                folder: "100acre/BuyCommercial"
-                            });
-
-                            otherImageLink.push({
-                                public_id: imageResult.public_id,
-                                url: imageResult.secure_url
+                                public_id: otherResult.public_id,
+                                url: otherResult.secure_url
                             })
-
                         }
+                    } else {
+                        const imageResult = await cloudinary.uploader.upload(other.tempFilePath, {
+                            folder: `100acre/BuyCommercial/${propertyName}`
+                        });
 
-                        const result = await buyCommercial_Model.findById(req.params.id)
-                        for (let i = 0; i < result.otherImage.length; i++) {
-                            otherImageLink.push(
-                                result.otherImage[i]
-                            );
-                        }
-                        const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
-
-                            otherImage: otherImageLink,
-                            projectName: projectName,
-                            propertyTitle: propertyTitle,
-                            price: price,
-                            state: state,
-                            city: city,
-                            address: address,
-                            descripation: descripation,
-                            amenities: amenities,
-                            type: type,
-                            area:area
-                        })
-                        // console.log(dataUpdate)
-                        await dataUpdate.save()
-                        res.status(200).json({
-                            message: "successfully updated !",
-                            data: dataUpdate
-                        })
+                        otherImageLink.push({
+                            public_id: imageResult.public_id,
+                            url: imageResult.secure_url
+                        });
+                    }
+                    const result = await buyCommercial_Model.findById(req.params.id)
+                    for (let i = 0; i < result.otherImage.length; i++) {
+                        otherImageLink.push(
+                            result.otherImage[i]
+                        );
                     }
 
-                } else {
-                    const dataset = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
-                        projectName: projectName,
-                        propertyTitle: propertyTitle,
+                    const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
+                        frontImage: {
+                            public_id: frontResult.public_id,
+                            url: frontResult.secure_url
+                        },
+                        otherImage: otherImageLink,
+                        propertyName: propertyName,
+                        propertytype: propertytype,
+                        availabledate: availabledate,
                         price: price,
                         state: state,
                         city: city,
@@ -330,24 +319,143 @@ class BuyController {
                         descripation: descripation,
                         amenities: amenities,
                         type: type,
-                        area:area
+                        area: area,
+                        furnishing: furnishing,
+                        landMark: landMark,
+                        builtYear: builtYear
                     })
-                    // console.log(dataset)
-                    await dataset.save()
+                    // console.log(dataUpdate)
+                    await dataUpdate.save()
                     res.status(200).json({
                         message: "successfully updated !",
-                        data: dataset
+                        data: dataUpdate
+                    })
+                } else if (req.files.frontImage) {
+                    const front = req.files.frontImage;
+                    const data = await buyCommercial_Model.findById(req.params.id)
+                    const imageId = data.frontImage.public_id;
+                    await cloudinary.uploader.destroy(imageId)
+
+                    const imageResult = await cloudinary.uploader.upload(front.tempFilePath, {
+                        folder: `100acre/BuyCommercial/${propertyName}`
+                    })
+
+                    const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
+                        frontImage: {
+                            public_id: imageResult.public_id,
+                            url: imageResult.secure_url
+                        },
+                        propertyName: propertyName,
+                        propertytype: propertytype,
+                        availabledate: availabledate,
+                        price: price,
+                        state: state,
+                        city: city,
+                        address: address,
+                        descripation: descripation,
+                        amenities: amenities,
+                        type: type,
+                        area: area,
+                        furnishing: furnishing,
+                        landMark: landMark,
+                        builtYear: builtYear
+
+                    })
+                    // console.log(dataUpdate)
+                    await dataUpdate.save()
+                    res.status(200).json({
+                        message: "successfully updatede !",
+                        data: dataUpdate
+                    })
+
+                }
+                else if (req.files.otherImage) {
+                    const other = req.files.otherImage;
+                    const otherImageLink = []
+
+                    if (other.length >= 2) {
+                        for (let i = 0; i < other.length; i++) {
+                            const otherimage = await cloudinary.uploader.upload(other[i].tempFilePath, {
+                                folder: `100acre/BuyCommercial/${propertyName}`
+                            })
+                            otherImageLink.push({
+                                public_id: otherimage.public_id,
+                                url: otherimage.secure_url
+                            })
+                        }
+                    } else {
+                        const imageResult = await cloudinary.uploader.upload(other.tempFilePath, {
+                            folder: `100acre/BuyCommercial/${propertyName}`
+                        });
+
+                        otherImageLink.push({
+                            public_id: imageResult.public_id,
+                            url: imageResult.secure_url
+                        })
+
+                    }
+
+                    const result = await buyCommercial_Model.findById(req.params.id)
+                    for (let i = 0; i < result.otherImage.length; i++) {
+                        otherImageLink.push(
+                            result.otherImage[i]
+                        );
+                    }
+                    const dataUpdate = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
+
+                        otherImage: otherImageLink,
+                        propertyName: propertyName,
+                        propertytype: propertytype,
+                        availabledate: availabledate,
+                        price: price,
+                        state: state,
+                        city: city,
+                        address: address,
+                        descripation: descripation,
+                        amenities: amenities,
+                        type: type,
+                        area: area,
+                        furnishing: furnishing,
+                        landMark: landMark,
+                        builtYear: builtYear
+                    })
+                    // console.log(dataUpdate)
+                    await dataUpdate.save()
+                    res.status(200).json({
+                        message: "successfully updated !",
+                        data: dataUpdate
                     })
                 }
+
             } else {
-                res.status(403).json({
-                    message: "require all field !"
+                const dataset = await buyCommercial_Model.findByIdAndUpdate(req.params.id, {
+                    propertyName: propertyName,
+                    propertytype: propertytype,
+                    availabledate: availabledate,
+                    price: price,
+                    state: state,
+                    city: city,
+                    address: address,
+                    descripation: descripation,
+                    amenities: amenities,
+                    type: type,
+                    area: area,
+                    landMark: landMark,
+                    furnishing: furnishing,
+                    builtYear: builtYear
+                })
+                // console.log(dataset)
+                await dataset.save()
+                res.status(200).json({
+                    message: "successfully updated !",
+                    data: dataset
                 })
             }
+
         } catch (error) {
             console.log(error);
             res.status(500).json({
-                message:"something went wrong ! "
+                message: "something went wrong ! "
             })
         }
     }
@@ -376,10 +484,10 @@ class BuyController {
         } catch (error) {
             console.log(error);
             res.status(500).json({
-               message:"something went wrong ! "
+                message: "something went wrong ! "
             })
         }
     }
+
 }
 module.exports = BuyController
-                    

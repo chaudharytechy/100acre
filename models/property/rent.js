@@ -14,10 +14,6 @@ const rent_Schema=new mongoose.Schema({
     otherImage:[
 
     ],
-    projectName:{
-     type:String,
-     required:true
-    },
     propertyType:{
         type:String,
         required:true
@@ -68,14 +64,18 @@ const rent_Schema=new mongoose.Schema({
         required:true
     }
   ],
-  landmark:{
+  landMark:{
     type:String,
     required:true
   },
 type:{
   type:String,
   required:true
-}
+},
+schema_type:{
+  type: String,
+  default:"rent"
+},
 
 },
 {timestamps:true}

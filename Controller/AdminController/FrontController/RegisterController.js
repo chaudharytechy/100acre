@@ -6,55 +6,54 @@ const nodemailer = require("nodemailer")
 
 
 
-const generateToken = () => {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
+// const generateToken = () => {
+//     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+// };
 
-const sendResetEmail = async (email, token) => {
-    // Connect with SMTP Gmail
-    const transporter = await nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 587,
-        auth: {
-            user: process.env.Email,
-            pass: process.env.EmailPass
-        },
-    });
-    // Send mail with defined transport object
-    let info = await transporter.sendMail({
-        from: 'test@gmail.com', // Sender address
-        to: "amit100acre@gmail.com", // List of receivers (admin's email) =='query.aadharhomes@gmail.com'
-        subject: 'Password Reset',
+// const sendResetEmail = async (email, token) => {
+//     // Connect with SMTP Gmail
+//     const transporter = await nodemailer.createTransport({
+//         host: 'smtp.gmail.com',
+//         port: 587,
+//         auth: {
+//             user: process.env.Email,
+//             pass: process.env.EmailPass
+//         },
+//     });
+//     // Send mail with defined transport object
+//     let info = await transporter.sendMail({
+//         from: 'test@gmail.com', // Sender address
+//         to: "amit100acre@gmail.com", // List of receivers (admin's email) =='query.aadharhomes@gmail.com'
+//         subject: 'Password Reset',
+//         html: `
+//         <!DOCTYPE html>
+//         <html lang:"en>
+//         <head>
+//         <meta charset:"UTF-8">
+//         <meta http-equiv="X-UA-Compatible"  content="IE=edge">
+//         <meta name="viewport"  content="width=device-width, initial-scale=1.0">
+//         <title>Forgot Password</title>
+//         </head>
+//         <body>
+//         <p>Dear User,</p>
+//         <p>Click the following link to reset your password : </p>
 
-        // html: `Click the following link to reset your password: http://localhost:3500/reset/${token}`, // HTML body
-        html: `
-        <!DOCTYPE html>
-        <html lang:"en>
-        <head>
-        <meta charset:"UTF-8">
-        <meta http-equiv="X-UA-Compatible"  content="IE=edge">
-        <meta name="viewport"  content="width=device-width, initial-scale=1.0">
-        <title>Forgot Password</title>
-        </head>
-        <body>
-        <p>Dear User,</p>
-        <p>Click the following link to reset your password : </p>
+//         <p>
+        
+//         <a href="http://localhost:3500/reset/${token}" target="_blank" rel="noopener noreferrer">Reset Your Password </a>
+//         </p>
 
-        <p>
-        <a href="http://localhost:3500/reset/${token}" target="_blank" rel="noopener noreferrer">Reset Your Password </a>
-        </p>
+//          <p>If you didn't request to password reset , please ingore this email  </p>
 
-         <p>If you didn't request to password reset , please ignore this email. </p>
-
-        <p>Best regrads ,
-             <br>https://www.100acress.com/
-        </p>
-        </body>
-        </html>
-`
-    });
-
-}
+//         <p>Best regrads ,
+//              <br>https://www.100acress.com/
+//         </p>
+//         </body>
+//         </html>
+// `
+//     });
+   
+// }
 class registerController {
 
     static register = async (req, res) => {
@@ -89,17 +88,17 @@ class registerController {
                             })
                         }
                     } else {
-                        res.status(500).json({
-                            message: "passwprd and Confirm password does not match  ! "
+                        res.status(401).json({
+                            message: " password and confirm password not match  ! "
                         })
                     }
                 } else {
-                    res.status(500).json({
-                        message: "something went dwrong ! "
+                    res.status(200).json({
+                        message: "something went wrong ! "
                     })
                 }
             }
-            // console.log(req.body)
+
         } catch (error) {
             console.log(error)
             res.status(500).json({
@@ -122,7 +121,7 @@ class registerController {
                             const token = jwt.sign({ user_id: user._id }, 'amitchaudhary100')
                             // console.log(token)
                             //  console.log(token)
-                             res.cookie('token',token)
+                            res.cookie('token', token)
                             // res.json('token', token)
                             res.status(200).json({
                                 message: "admin pannel login successful! ",
@@ -131,8 +130,6 @@ class registerController {
 
                         } else {
                             const token = jwt.sign({ user_id: user._id }, 'amitchaudhary100')
-                            // console.log(token)
-                            // res.json('token', token)
                             res.cookie('token', token)
                             res.status(200).json({
                                 message: "admin user login successful! "
@@ -145,18 +142,18 @@ class registerController {
                     }
 
                 } else {
-                    res.status(500).json({
+                    res.status(401).json({
                         message: "this email yet not register"
                     })
                 }
             }
         } catch (error) {
             console.log(error)
-            res.status("something went wrong")
+            res.status(500).json({
+                message: "Internal server error !"
+            })
         }
     }
-
-
     static logout = async (req, res) => {
         // res.send('hello logout')
         try {
@@ -172,19 +169,16 @@ class registerController {
             })
         }
     }
-
     // forget password
-
-
     static forgetPassword = async (req, res) => {
-        // res.send('hello forget listen')
         const { email } = req.body
-        // console.log(email)
         try {
             const user = await registerModel.findOne({ email: email })
             // console.log(user)
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({
+                    message:'User not found'
+                });
             }
 
             // genrate token
@@ -197,28 +191,28 @@ class registerController {
             // Send email with reset link
             await sendResetEmail(email, token);
 
-            res.json({ message: 'Password reset link sent' });
+            res.status(200).json({
+                message: 'Password reset link sent to your email id !'
+            });
 
 
         } catch (error) {
             console.log(error)
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).json({
+                message: 'Internal server error'
+            });
 
         }
     }
-
     // Handle password reset
     static reset = async (req, res) => {
-        // res.send('hello reset')
+        // res.send("djhdbsdcdkb")
         const { token } = req.params
         const { password } = req.body
         console.log(password)
         // console.log(token,password)
-        // const hashpassword = await bcrypt.hash(password, 10)
-        // console.log(hashpassword)
-
         try {
-
+           if(password){
             const hashpassword = await bcrypt.hash(password, 10)
 
             const user = await registerModel.findOneAndUpdate({ token: token }, ({
@@ -232,9 +226,9 @@ class registerController {
             // const token=user.token;
 
             res.json({ message: 'Password reset successful' });
-        } catch (error) {
+        }
+     } catch (error) {
             console.log(error)
-
             res.status(500).json({
                 message: 'Internal server error'
             });

@@ -1,31 +1,6 @@
 const mongoose = require('mongoose')
 
-const post_Schema =new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    mobile: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true,
-        minlength: 8,
-        match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
-    },
-    postProperty: [
-        {
+const property_Schema=new mongoose.Schema({
             frontImage: {
                 public_id: {
                     type: String,
@@ -82,12 +57,46 @@ const post_Schema =new mongoose.Schema({
             address: {
                 type: String
             },
-        }
+            email:{
+                type:String
+            },
+            number:{
+                type:String
+            },
+            verify:{
+                type:String
+            },
+            propertyLooking:{
+                type:String
+            }
+        })
+
+const post_Schema =new mongoose.Schema({
+    name: {
+        type: String,
+
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    mobile: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 5,
+        match: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
+    },
+    postProperty: [
+        property_Schema
     ],
 
     role: {
         type: String,
-        default: "Seller"
+        required:true
     },
     token: {
         type: String,
@@ -99,3 +108,6 @@ const post_Schema =new mongoose.Schema({
 )
 const postPropertyModel = mongoose.model('postProperty', post_Schema)
 module.exports = postPropertyModel
+
+
+
