@@ -10,7 +10,7 @@ class otherpropertyController {
   static otherproperty_Insert = async (req, res) => {
     try {
       const { propertyOwnerEmail, propertyOwnerNumber, propertyType, propertyName, address, city, state, price, area, descripation, landMark, amenities, builtYear, furnishing, type, availableDate } = req.body
-
+ const Name=propertyName.trim()
       const frontImage = req.files.frontImage;
       const frontResult = await cloudinary.uploader.upload(
         frontImage.tempFilePath, {
@@ -387,6 +387,8 @@ class otherpropertyController {
       if (cust_Email && cust_Number) {
         const data = new otherEnquiryModel({
           sellerEmail: sellerEmail,
+          sellerEmail:sellerEmail,
+          sellerEmail:sellerEmail,
           SellermobileNumber: SellermobileNumber,
           cust_Email: cust_Email,
           cust_Number: cust_Number,
@@ -515,12 +517,12 @@ class otherpropertyController {
   }
   // other property Enquiry view 
   static otherEnquiry_view = async (req, res) => {
-    // console.log("hello")
+   
     try {
-      // res.send("jjj")
+      
       const id = req.params.id
-      // console.log(id)
-      const data = await otherEnquiryModel.findById(id)
+      
+      const data = await otherEnquiryModel.findById({_id:id})
       // res.send(data)
       res.status(200).json({
         message: "data get successfully !",

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const postSchema = new mongoose.Schema({
-    blogImage: {
+const blogSchema = new mongoose.Schema({
+    blog_Image: {
         public_id: {
             type: String,
         },
@@ -9,54 +9,26 @@ const postSchema = new mongoose.Schema({
             type: String,
         },
     },
-    title: {
+    blog_Title: {
         type: String,
     },
-    descripation: {
+    blog_Description: {
         type: String,
     },
-    content: {
+   
+    author:{
         type: String,
-        required: true
+       
     },
-    author: {
-        type: String,
-        required: true
-    },
-    date: {
+    published_Date: {
         type: Date,
         default: Date.now
     },
-    category: {
-        type: String,
-        required: true
+    blog_Category: {
+        type: String, 
     },
-    tags: [String],
-    image: String,
+   
 });
-
-const blogSchema = new mongoose.Schema({
-    sliderImage: {
-        public_id: {
-            type: String,
-            required: true
-        },
-        url: {
-            type: String,
-            required: true
-        }
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    descripation: {
-        type: String,
-        required: true
-    },
-    blog: [postSchema] // Using the subdocument schema as an array in the main schema
-});
-
 const BlogModel = mongoose.model('Blog', blogSchema);
 
 module.exports = BlogModel;

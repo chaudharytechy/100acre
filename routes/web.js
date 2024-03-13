@@ -49,6 +49,7 @@ router.get('/project/trending',projectController.project_trending)
 router.get('/project/featured',projectController.project_featured)
 router.get('/project/upcoming',projectController.project_Upcoming)
 router.get('/project/city',projectController.project_City)
+router.get('/project/affordable',projectController.projectAffordable)
 
    //from
 router.post('/userInsert', projectController.userInsert)
@@ -142,21 +143,14 @@ router.post('/postPerson/propertyoneUpdate/:id', PostPropertyController.postProp
 router.delete('/postPerson/propertyDelete/:id', PostPropertyController.postProperty_Delete)
 router.post("/postEnquiry",PostPropertyController.postPropertyEnquiry)
 
+// blog page route
 
-//Blog
-router.post("/blog/insert", blogController.blog_Insert)
-router.get("/blog/blogviewAll", blogController.blogviewAll)
-router.get('/blog/view/:id', blogController.blog_View)
-router.get('/blog/edit/:id', blogController.blog_Edit)
-router.post('/blog/update/:id', blogController.blog_Update)
-router.delete('/blog/delete/:id', blogController.blog_delete)
-//BlogPost routing
-router.post("/blogPost/insert/:id", blogController.blogPost_insert)
-router.get('/blogPost/view/:id', blogController.blogPost_view)
-router.get("/blogPost/edit/:id", blogController.blogPost_edit)
-router.post("/blogPost/update/:id", blogController.blogPost_update)
-router.delete('/blogPost/delete/:id', blogController.blogPost_delete)
-
+router.post("/blog/insert",blogController.blog_insert)
+router.get("/blog/view",blogController.blog_view)
+router.get("/blog/view/:id",blogController.blog_viewId)
+router.get("/blog/edit/:id",blogController.blog_edit)
+router.put("/blog/update/:id",blogController.blog_update)
+router.delete("/blog/delete/:id",blogController.blog_delete)
 //Searching routing
 // searching rent and buy
 router.get("/property/search/:key", homeController.search)
@@ -193,7 +187,7 @@ router.delete("/otherproperty/enquiry/delete/:id",otherpropertyController.otherE
 
 
 
-router.get("/city",homeController.dataCity)
+router.post("/city",homeController.dataCity)
 
 
 module.exports = router

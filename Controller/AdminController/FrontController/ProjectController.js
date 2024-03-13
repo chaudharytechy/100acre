@@ -1,3 +1,5 @@
+
+
 const ProjectModel = require("../../../models/projectDetail/project");
 const UserModel = require("../../../models/projectDetail/user");
 const cloudinary = require('cloudinary').v2;
@@ -36,7 +38,6 @@ class projectController {
                 city,
                 projectOverview,
                 project_url,
-                
                 project_Status,
 
             } = req.body
@@ -613,6 +614,7 @@ class projectController {
                         },
                         projectName: projectName,
                         state: state,
+                       
                         project_discripation: project_discripation,
                         projectAddress: projectAddress,
                         bulderName: builderName,
@@ -710,6 +712,7 @@ class projectController {
                         project_floorplan_Image: floorplanLink,
                         projectName: projectName,
                         state: state,
+                        builderName:builderName,
                         projectAddress: projectAddress,
                         project_discripation: project_discripation,
                         projectRedefine_Business: projectRedefine_Business,
@@ -761,6 +764,7 @@ class projectController {
                         projectGallery:projectGalleryArray,
                         projectName: projectName,
                         state: state,
+                        builderName:builderName,
                         projectAddress: projectAddress,
                         project_discripation: project_discripation,
                         projectRedefine_Business: projectRedefine_Business,
@@ -796,6 +800,7 @@ class projectController {
                         },
                         projectName: projectName,
                         state: state,
+                        builderName:builderName,
                         projectAddress: projectAddress,
                         project_discripation: project_discripation,
                         projectRedefine_Business: projectRedefine_Business,
@@ -831,6 +836,7 @@ class projectController {
                         project_Brochure:project_BrochureResult,
                         projectName: projectName,
                         state: state,
+                        builderName:builderName,
                         projectAddress: projectAddress,
                         project_discripation: project_discripation,
                         projectRedefine_Business: projectRedefine_Business,
@@ -867,6 +873,7 @@ class projectController {
                         },
                         projectName: projectName,
                         state: state,
+                        builderName:builderName,
                         projectAddress: projectAddress,
                         project_discripation: project_discripation,
                         projectRedefine_Business: projectRedefine_Business,
@@ -906,6 +913,7 @@ class projectController {
                     meta_title: meta_title,
                     city: city,
                     type: type,
+                    builderName:builderName,
                     projectOverview: projectOverview,
                     project_url:project_url,
                     project_Status:project_Status
@@ -926,7 +934,7 @@ class projectController {
     static projectviewAll = async (req, res) => {
 
         try {
-            const data = await ProjectModel.find()
+            const data = await ProjectModel.find().sort({createdAt: -1 })
        if(data){
             res.status(200).json({
                 message: "All project Data get  !",
@@ -945,6 +953,7 @@ class projectController {
             })
         }
     }
+
 // Route handler to get all project data
 // static projectviewAll = async (req, res) => {
 //     try {
@@ -975,18 +984,81 @@ class projectController {
         // console.log("helo")
         try {
             const id = req.params.id
-        
+            const data_id=await ProjectModel.findById({_id:id})
+            // console.log(data_id)
+            if(data_id){
+            const logoId=data_id.logo.public_id;
+            if(logoId){
+                await cloudinary.uploader.destroy(logoId)
+            }
+            const frontId = data_id.frontImage.public_id;
+            if (frontId != null) {
+                await cloudinary.uploader.destroy(frontId);
+            }
+            const locationId=data_id.project_locationImage.public_id;
+            if(locationId){
+                await cloudinary.uploader.destroy(locationId)
+            }
+            const floorId=data_id.project_floorplan_Image
+            for(let i=0; i< floorId.length ; i++){
+                const id=data_id.project_floorplan_Image[i].public_id;
+
+            if(floorId){
+               await cloudinary.uploader.destroy(id) 
+            }
+        }
+            const highlightId=data_id.highlightImage.public_id;
+            if(highlightId){
+                await cloudinary.uploader.destroy(highlightId)
+            }
+            const BrochureId=data_id.project_Brochure.public_id;
+            if(BrochureId){
+                await cloudinary.uploader.destroy(BrochureId)
+            }
+            const GalleryId=data_id.projectGallery
+            for(let i=0;i<GalleryId.length ; i++){
+                const id=data_id.projectGallery[i].public_id;
+                if(id){
+                    await cloudinary.uploader.destroy(id)
+                }
+            }
+            const masterId=data_id.projectMaster_Image.public_id;
+            if(masterId){
+                await cloudinary.uploader.destroy(masterId)
+            }
             const data = await ProjectModel.findByIdAndDelete({ _id: id })
             res.status(202).json({
                 message: 'data deleted sucessfully!',
                 // deletedata: data
             })
+        }else{
+           res.status(200).json({
+            message:"Project alredy deleted"
+           })
+        }
         } catch (error) {
             console.log(error)
             res.status(500).json({
                 message: "internal server error !"
             })
         }
+    }
+    static projectAffordable=async(req,res)=>{
+      try{
+       const affordable="Affordable Homes";
+     const data=await ProjectModel.find({type:affordable})
+    //  console.log(data)
+    res.status(200).json({
+        message:"data get successfully ! ",
+        data
+    })
+    // res.send(data)
+    }catch(error){
+        console.log(error)
+        res.status(500).json({
+            message:"Internal server error !"
+        })
+      }
     }
     //project find trending data
    static project_trending=async(req,res)=>{
@@ -1052,6 +1124,7 @@ class projectController {
      })  
     }
      }
+
      static highlightPoint=async(req,res)=>{
       
         try {

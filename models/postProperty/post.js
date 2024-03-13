@@ -106,6 +106,16 @@ const post_Schema =new mongoose.Schema({
    
 }
 )
+
+post_Schema.index({
+    'postProperty.propertyName': 'text',
+    'postProperty.city': 'text',
+    'postProperty.state': 'text',
+    'postProperty.type': 'text',
+    'postProperty.landMark': 'text',
+    'postProperty.price': 1
+});
+
 const postPropertyModel = mongoose.model('postProperty', post_Schema)
 module.exports = postPropertyModel
 

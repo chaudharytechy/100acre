@@ -147,6 +147,18 @@ const projectSchema = new mongoose.Schema({
         timestamps: true
     }
 )
+projectSchema.index({
+    projectName: 'text',
+    projectAddress: 'text',
+    project_discripation: 'text',
+    builderName: 'text',
+    city: 'text',
+    type: 'text',
+    'BhK_Details.bhk_Area': 1,
+    'BhK_Details.price': 1,
+    'BhK_Details.bhk_type': 1
+    
+});
 
 const ProjectModel = mongoose.model("projectData", projectSchema)
 module.exports = ProjectModel

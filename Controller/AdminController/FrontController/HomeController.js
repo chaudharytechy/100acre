@@ -7,118 +7,200 @@ const rent_Model = require("../../../models/property/rent")
 
 const ProjectModel = require("../../../models/projectDetail/project");
 const postPropertyModel = require("../../../models/postProperty/post");
+const projectController = require("./ProjectController");
 
 
 
 class homeController {
-  // search in buy and rent 
-  static search = async (req, res) => {
-    const searchTerm = req.params.key;
-    if (searchTerm.length) {
-      const words = searchTerm.split(' ');
-      const searchdata = []
-      try {
 
-        for (let i = 0; i < words.length; i++) {
-              //  console.log(words[i])
-          let data = await buyCommercial_Model.find(
-            {
-              "$or": [
-                { "projectName": { $regex: words[i], $options: 'i' } },
-                { "propertytype": { $regex: words[i], $options: 'i' } },
-                { "address": { $regex: words[i], $options: 'i' } },
-                { "city": { $regex: words[i], $options: 'i' } },
-              ]
-            }
-          )
-          let data2 = await rent_Model.find(
-            {
-              "$or": [
-                { "projectName": { $regex: words[i], $options: 'i' } },
-                { "propertytype": { $regex: words[i], $options: 'i' } },
-                { "city": { $regex: words[i], $options: 'i' } },
-                { "type": { $regex: words[i], $options: 'i' } }
-              ]
-            }
-          )
-          let data3 = await ProjectModel.find(
-            {
-              "$or": [
-                { "projectName": { $regex: words[i], $options: "i" } },
-                { "city": { $regex: words[i], $options: "i" } },
-                { "builderName": { $regex: words[i], $options: "i" } }
-              ]
-            }
-          )
-          let data4 = await postPropertyModel.aggregate([
-            {
-              $match: {
-                // Match conditions  user document
-              }
-            },
-             {
-               $unwind: "$postProperty" // Deconstruct  postProperty array
-            
-            },
-            {
-              $match: {
-                //  search criteria here
-                "postProperty.city": { $regex: words[i], $options: "i" },
-                "postProperty.projectName": { $regex: words[i], $options: "i" },
-                "postProperty.builderName": { $regex: words[i], $options: "i" },
-                
-              }
-            },
-            {
-              $group: {
-                _id: "$_id",
-                name: { $first: "$name" }, // You can include other fields from the user document if needed
-                email: { $first: "$email" },
-                mobile: { $first: "$mobile" },
-                role: { $first: "$role" },
-                token: { $first: "$token" },
-                postProperty: { $push: "$postProperty" } // Collect the filtered postProperty documents
-              }
-            }
-          ]);
+//   static search = async (req, res) => {
 
-          // console.log(data4);
-          const getdata = [...data,...data2,...data3, ...data4]
-          if (getdata.length > 0) {
-            searchdata.push(...getdata)
-          }
-        }
+//  const results=await postPropertyModel.aggregate([
+//       {
+//         $match: {
+//           $text: { $search: "2700000" } // Text search
+//         }
+//       },
+//       {
+//         $addFields: {
+//           score: { $meta: 'textScore' } // Add textScore as a field for sorting
+//         }
+//       },
+//       {
+//         $sort: { score: { $meta: 'textScore' } } // Sort by textScore
+//       },
+//       {
+//         $group: {
+//           _id: "$_id",
+//           name: { $first: "$name" },
+//           email: { $first: "$email" },
+//           mobile: { $first: "$mobile" },
+//           role: { $first: "$role" },
+//           token: { $first: "$token" },
+//           postProperty: { $push: "$postProperty" }
+//         }
+//       }
+//     ])
+    
 
-        if (searchdata.length > 0) {
-          res.status(200).json({
-            message: "data found ! .",
-            searchdata
-          })
-        } else {
-         const data=await ProjectModel.find()
-         const getdata = [...data]
-         if (getdata.length > 0) {
-          searchdata.push(...getdata)
-        }
-         if (searchdata.length > 0) {
-          res.status(200).json({
-            message: "data found ! .",
-            searchdata
-          })
-        } 
-        
-        }
+//     res.json(results);
 
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      res.status(200).json({
-        message: "Please inter your query! "
-      })
-    }
-  }
+//   }
+  // static search = async (req, res) => {
+  //   const searchTerm = req.params.key;
+  //   if (!searchTerm) {
+  //     return res.status(200).json({
+  //       message: "Please enter your query!"
+  //     });
+  //   }
+  //   try {
+  //     const searchResults = await Promise.all([
+  //       ProjectModel.find({ $text: { $search: "property in delhi" } })
+  //       .select({
+  //         score: { $meta: 'textScore' }})
+  //       .sort({ score: { $meta: 'textScore' } }),
+  //       rent_Model.find({ $text: { $search: "property in delhi" } })
+  //       .select({
+  //         score: { $meta: 'textScore' }})
+  //       .sort({ score: { $meta: 'textScore' } }),
+  //       ProjectModel.find({ $text: { $search: "property in delhi" } })
+  //       .select({
+  //         score: { $meta: 'textScore' }})
+  //       .sort({ score: { $meta: 'textScore' } }),
+  //       postPropertyModel.aggregate([
+  //         {
+  //           $match: {
+  //             "postProperty.city": { $regex: searchTerm, $options: "i" },
+  //             "postProperty.projectName": { $regex: searchTerm, $options: "i" },
+  //             "postProperty.builderName": { $regex: searchTerm, $options: "i" },
+  //           }
+  //         },
+  //         {
+  //           $group: {
+  //             _id: "$_id",
+  //             name: { $first: "$name" },
+  //             email: { $first: "$email" },
+  //             mobile: { $first: "$mobile" },
+  //             role: { $first: "$role" },
+  //             token: { $first: "$token" },
+  //             postProperty: { $push: "$postProperty" }
+  //           }
+  //         }
+  //       ])
+  //     ]);
+
+  //     const searchdata = searchResults.flat();
+
+  //     if (searchdata.length > 0) {
+  //       return res.status(200).json({
+  //         message: "Data found-1!",
+  //         searchdata
+  //       });
+  //     } else {
+  //       const words = searchTerm.split(' ');
+  //       const searchPromises = [];
+  //       words.forEach(word => {
+  //         searchPromises.push(
+  //           buyCommercial_Model.find({
+  //             $or: [
+  //               { "projectName": { $regex: word, $options: 'i' } },
+  //               { "propertytype": { $regex: word, $options: 'i' } },
+  //               { "address": { $regex: word, $options: 'i' } },
+  //               { "city": { $regex: word, $options: 'i' } },
+  //             ]
+  //           }),
+  //           rent_Model.find({
+  //             $or: [
+  //               { "projectName": { $regex: word, $options: 'i' } },
+  //               { "propertytype": { $regex: word, $options: 'i' } },
+  //               { "city": { $regex: word, $options: 'i' } },
+  //               { "type": { $regex: word, $options: 'i' } }
+  //             ]
+  //           }),
+  //           ProjectModel.find({
+  //             $or: [
+  //               { "projectName": { $regex: word, $options: "i" } },
+  //               { "city": { $regex: word, $options: "i" } },
+  //               { "builderName": { $regex: word, $options: "i" } }
+  //             ]
+  //           }),
+  //           postPropertyModel.aggregate([
+  //             {
+  //               $match: {
+  //                 "postProperty.city": { $regex: word, $options: "i" },
+  //                 "postProperty.propertyName": { $regex: word, $options: "i" },
+  //                 "postProperty.builderName": { $regex: word, $options: "i" },
+  //               }
+  //             },
+  //             {
+  //               $group: {
+  //                 _id: "$_id",
+  //                 name: { $first: "$name" },
+  //                 email: { $first: "$email" },
+  //                 mobile: { $first: "$mobile" },
+  //                 role: { $first: "$role" },
+  //                 token: { $first: "$token" },
+  //                 postProperty: { $push: "$postProperty" }
+  //               }
+  //             }
+  //           ])
+  //         );
+  //       });
+  //       const searchResults = await Promise.all(searchPromises);
+  //       const searchdata = searchResults.flat();
+
+  //       if (searchdata.length > 0) {
+  //         return res.status(200).json({
+  //           message: "Data found-2!",
+  //           searchdata
+  //         });
+  //       } else {
+  //         const data = await ProjectModel.find();
+  //         return res.status(200).json({
+  //           message: "No data found-3.",
+  //           searchdata: data
+  //         });
+  //       }
+
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+  //     return res.status(500).json({
+  //       message: "Internal server error"
+  //     });
+  //   }
+  // };
   //search for otherproperty 
+  static search =async(req,res)=>{
+    const results = await postPropertyModel.aggregate([
+      {
+        $match:  {
+          $text: { $search: "2700000" } // Perform text search
+        }
+      
+      },
+      {
+        $addFields: {
+          score: { $meta: 'textScore' } // Add textScore as a field for sorting
+        }
+      },
+      {
+        $sort: { score: { $meta: 'textScore' } } // Sort by textScore
+      },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          email: { $first: "$email" },
+          mobile: { $first: "$mobile" },
+          role: { $first: "$role" },
+          token: { $first: "$token" },
+          postProperty: { $push: "$postProperty" }
+        }
+      }
+    ]);
+  }
+  
   static search_other = async (req, res) => {
     const { query } = req.query
     console.log(query)
@@ -263,7 +345,7 @@ class homeController {
       const { projectName, city,
         builderName, minPrice, maxPrice, state, area, type, furnishing } = req.query;
       // console.log(projectName)
-      
+
       const filter_data = []
       const query = {};
       //  filter according the state
@@ -359,31 +441,55 @@ class homeController {
   // ///////////////////
 
 
-  // Count total number of data according to city 
+  // count total number of data according city in the data base 
   static dataCity = async (req, res) => {
     try {
-        const cityCounts = await ProjectModel.aggregate([
-            {
-                $group: {
-                    _id: '$builderName', // Group by the builderName field
-                    count: { $sum: 1 }, // Count documents for each builderName
-                    documents: { $push: '$$ROOT' } // Push all fields of documents into an array $$ROOT refers to the root document, so it includes all fields of the document.
-                }
-            }
-        ]);
+      const cityCounts = await ProjectModel.aggregate([
+        {
+          $group: {
+            _id: '$builderName', // Group by the builderName field
+            count: { $sum: 1 }, // Count documents for each builderName
+            documents: { $push: { name } }
+            // documents: { $push: '$$ROOT' } // Push all fields of documents into an array $$ROOT refers to the root document, so it includes all fields of the document.
+          }
+        }
+      ]);
 
-        res.status(200).json({
-            cityCounts: cityCounts
-        });
+      res.status(200).json({
+        cityCounts: cityCounts
+      });
+
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: "Error occurred while counting documents"
-        });
+      console.log(error);
+      res.status(500).json({
+        message: "Error occurred while counting documents"
+      });
     }
-}
+  }
 
+  static dataCity = async (req, res) => {
+    try {
+      const filter = { type: "Residential" };
+      const updateDoc = {
+        $set: {
+          type: "Residential Flats" // Update the city with your desired value
+        }
+      };
 
+      const result = await ProjectModel.updateMany(filter, updateDoc);
+
+      console.log(`${result.modifiedCount} document(s) were updated.`);
+
+      res.status(200).json({
+        message: `${result.modifiedCount} document(s) were updated.`
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: "Error occurred while updating documents"
+      });
+    }
+  }
 
 
 }
